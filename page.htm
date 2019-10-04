@@ -1,12 +1,15 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Art Bot 3 v0.3</title>
+    <title>Art Bot 3 v0.4</title>
 </head>
 <body onload="LoadGL();">
         <script src="seedrandom.js"></script>
     <script type="text/javascript">
+
+        var requestNew = 0;
+        var showFunc = null;
 
 Array.prototype.random = function() {
     return this[Math.floor(Math.random()*this.length)];
@@ -25,7 +28,7 @@ String.prototype.hashCode = function() {
 
 var grammar = {
     //'expr': function() { return ['Math.cos(expr)','Math.sin(expr)','expr-expr','expr*expr','expr+expr','expr%expr','Math.abs(expr)','Math.sqrt(expr)','Math.floor(expr)','Math.ceil(expr)','Math.max(expr,expr)','Math.min(expr,expr)','Math.atan2(expr,expr)','sigmoid(expr)','sigmoidd(expr)','Math.pow(expr,expr)','Math.exp(expr)', 'PerlinNoise.noise(expr,expr,expr)', 'Dist(expr,expr,expr,expr)', 'Sign(expr)'].random(); },
-    'expr': function() { return ['expr+expr', 'expr-expr', 'expr*expr', 'radians(expr)', 'degrees(expr)', 'sin(expr)', 'cos(expr)', 'tan(expr)', 'asin(expr)', 'acos(expr)', 'atan(expr,expr)', 'atan(expr)', 'pow(expr,expr)', 'exp(expr)', 'log(expr)', 'exp2(expr)', 'log2(expr)', 'sqrt(expr)', 'inversesqrt(expr)', 'abs(expr)', 'floor(expr)', 'ceil(expr)', 'mod(expr, expr)', 'min(expr,expr)', 'max(expr,expr)', 'clamp(expr,expr,expr)', 'mix(expr,expr,expr)', 'step(expr,expr)', 'smoothstep(expr,expr,expr)', 'length(vec2(expr,expr))', 'distance(vec2(expr,expr),vec2(expr,expr))', 'dot(vec2(expr,expr),vec2(expr,expr))', 'sdSphere(vec3(expr,expr,expr),expr)', 'sdBox(vec3(expr,expr,expr),expr)'].random(); },
+    'expr': function() { return ['expr+expr', 'expr-expr', 'expr*expr', 'radians(expr)', 'degrees(expr)', 'sin(expr)', 'cos(expr)', 'tan(expr)', 'asin(expr)', 'acos(expr)', 'atan(expr,expr)', 'atan(expr)', 'pow(expr,expr)', 'exp(expr)', 'log(expr)', 'exp2(expr)', 'log2(expr)', 'sqrt(expr)', 'inversesqrt(expr)', 'abs(expr)', 'floor(expr)', 'ceil(expr)', 'mod(expr,expr)', 'min(expr,expr)', 'max(expr,expr)', 'clamp(expr,expr,expr)', 'mix(expr,expr,expr)', 'step(expr,expr)', 'smoothstep(expr,expr,expr)', 'length(vec2(expr,expr))', 'distance(vec2(expr,expr),vec2(expr,expr))', 'dot(vec2(expr,expr),vec2(expr,expr))', 'sdSphere(vec3(expr,expr,expr),expr)', 'sdBox(vec3(expr,expr,expr),expr)'].random(); },
     'number': function() { return (10*Math.random()).toFixed(2) },
     'var': function() { 
         var result = ['x','y','t'].random(); 
@@ -47,7 +50,7 @@ function findGetParameter(parameterName) {
         .split("&")
         .forEach(function (item) {
           tmp = item.split("=");
-          if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+          if (tmp[0] === parameterName) result = tmp[1];
         });
     return result;
 }
@@ -170,6 +173,8 @@ var zoom = 1;
 
 function LoadGL()
 {
+    document.getElementById("urlText").value = "";
+
     try {
 		gl = document.getElementById("webgl")
 			.getContext("experimental-webgl");
@@ -181,19 +186,32 @@ function LoadGL()
 
 function RegenShaders(shaderText=null)
 {
-    LoadPalette();
-
     var vertexShader = "attribute vec3 pos;"+
 		"void main() {"+
 		"	gl_Position = vec4(pos, 1.0);"+
         "}"
 
-    var showFunc = findGetParameter("equation");
-    showFunc = shaderText;
-    if(showFunc==null)
-        showFunc = genExpr();
+    if (shaderText == null) {
+        // if we aren't loading with the Load button check the get param
+        if (showFunc == null) {
+            showFunc = findGetParameter("equation")
+        }
+
+        // clicks on New button should always generate a new one
+        // else we didn't click Load or have a get param
+        if (showFunc == null || requestNew == 1) {
+            requestNew = 0;
+            showFunc = genExpr();
+        }
+    }
+    else
+        showFunc = shaderText
+        
 
     document.getElementById("showfunc").value = showFunc;
+    equationText = showFunc;
+
+    LoadPalette();
 
     var fragmentShader = "precision highp float;" +
         "uniform float t;" +
@@ -361,6 +379,18 @@ function checkKey(e) {
 
     //return false;
 }
+        
+        function CopyLink() {
+            var copyText = document.getElementById("showfunc").value;
+            var myUrl = location.protocol + '//' + location.host + location.pathname;
+            var newUrl = myUrl + "?equation=" + copyText;
+
+            var copyText = document.getElementById("urlText");
+            document.getElementById("urlText").value = newUrl;
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            document.execCommand("copy");
+        }
 
 function CopyEquation()
 {
@@ -464,7 +494,6 @@ imageData[3] = 255;
 
 context.putImageData(imageDat,0,0);
 }
-
     </script>
 
 <center>
@@ -488,9 +517,9 @@ context.putImageData(imageDat,0,0);
         </tr>
     </table>
     <br>
-    <input type="button" onclick="RegenShaders();" value="New" style="width: 200px; height: 200px;"/>
+    <input type="button" onclick="requestNew= 1; RegenShaders();" value="New" style="width: 200px; height: 200px;"/>
     <input type="button" onclick="CopyEquation();" value="Copy Equation" style="width: 200px; height: 200px;"/>
-    <!-- <input type="button" onclick="CopyLink();" value="Copy Link" style="width: 200px; height: 200px;"/> -->
+    <input type="button" onclick="CopyLink();" value="Copy Link" style="width: 200px; height: 200px;"/>
     <input type="button" onclick="LoadEquation();" value="Load" style="width: 200px; height: 200px;"/>
     <br>
     Complexity: <input type="text" value="140" onchange="complexity=Number(this.value);"/>
@@ -498,6 +527,7 @@ context.putImageData(imageDat,0,0);
     <textarea rows="4" cols="50" id="showfunc"/></textarea><br>
     Zoom: <span id="zoom"></span><br>
     Offsets: <span id="xOffset"></span>, <span id="yOffset"></span>
+    <input type="text" value="" id="urlText"/>
 </center>
 </body>
 </html>
