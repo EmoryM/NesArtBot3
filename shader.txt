@@ -6,8 +6,13 @@ uniform float t;
 uniform float xOffset;
 uniform float yOffset;
 uniform float zoom;
+
+// palette
 uniform sampler2D uSampler;
+
+// previous frame (?)
 uniform sampler2D uSamplerB;
+
 const float PI = 3.14159265359;
 float minPositiveFloat = 0.00006;
 
@@ -131,10 +136,13 @@ float snoise(vec3 v){
 }
 
 float sR()
+{
+	return texture2D(uSamplerB, vec2(gl_FragCoord[0]/512.0,gl_FragCoord[1]/512.0)).r;
+}
+
+float sR(float x, float y)
         {
-           float x = (zoom * (gl_FragCoord[0]))+xOffset;
-           float y = (zoom * (gl_FragCoord[1]))+yOffset;
-           return texture2D(uSamplerB, vec2(x,y)).r;
+	return texture2D(uSamplerB, vec2(x/512.0,y/512.0)).r;
         }
 
         float satan(float a, float b)
@@ -308,4 +316,5 @@ float sdOctahedron(vec3 p, float s)
            float y = (zoom * (gl_FragCoord[1]))+yOffset; 
            vec2 vTextureCoord = vec2(<<<showFunc>>>, .5);  
            gl_FragColor = texture2D(uSampler, vTextureCoord);
-        }
+           gl_FragColor.a = 1.0;   
+}

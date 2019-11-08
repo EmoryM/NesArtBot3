@@ -93,6 +93,8 @@ stolenFunctionsA = ["hash12(vec2(expr,expr))", "Hash(vec3(expr,expr,expr))",
 
 allFunctions = basicFunctions.concat(basicFunctions, angleAndTrigFunctions, exponentialFunctions, commonFunctions, geometricFunctions, signedDistanceFunctions, stolenFunctionsA);
 
+allFunctions.push("sR()")
+
 console.log(allFunctions);
 
 var grammar = {
@@ -124,6 +126,9 @@ var randomSeed = (new Date()).getTime();
 var seedOffset = 0;
 Math.seedrandom(randomSeed+seedOffset);
 var glCanvas = null;
+var paletteTexture = null;
+var canvasTexture = null;
+var drawing = true;
 
 function findGetParameter(parameterName) {
     var result = null,
@@ -468,11 +473,15 @@ function LoadGL()
 		throw "Your web browser does not support WebGL!";
 	}
 
+    canvasTexture = InitTexture(gl);
+
     setTimeout(init, 100);
 }
 
 function RegenShaders(shaderText=null)
 {
+    drawing = false;
+
     Math.seedrandom(randomSeed+seedOffset+complexity);
 
     var vertexShader = "attribute vec3 pos;"+
@@ -522,8 +531,8 @@ function RegenShaders(shaderText=null)
     zoom = 1;
 
     paletteCanvas = document.getElementById("palette");
-    texture = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, texture);
+    paletteTexture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, paletteTexture);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, paletteCanvas);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
@@ -532,9 +541,56 @@ function RegenShaders(shaderText=null)
     // texture = loadTexture(gl, "texture1d.png");
 
     gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.bindTexture(gl.TEXTURE_2D, paletteTexture);
 
     return prog;
+}
+
+function InitTexture(gl) {
+  const texture = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+
+  // Because video has to be download over the internet
+  // they might take a moment until it's ready so
+  // put a single pixel in the texture so we can
+  // use it immediately.
+  const level = 0;
+  const internalFormat = gl.RGBA;
+  const width = 512;
+  const height = 512;
+  const border = 0;
+  const srcFormat = gl.RGBA;
+  const srcType = gl.UNSIGNED_BYTE;
+  //const pixel = new Uint8Array([0, 0, 255, 255]);  // opaque blue
+  gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
+                width, height, border, srcFormat, srcType,
+                null);
+
+  // Turn off mips and set  wrapping to clamp to edge so it
+  // will work regardless of the dimensions of the video.
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+  return texture;
+}
+
+function UpdateTexture(gl, textur, canvas)
+{
+    const level = 0;
+    const internalFormat = gl.RGBA;
+    const srcFormat = gl.RGBA;
+    const srcType = gl.UNSIGNED_BYTE;
+    
+    gl.activeTexture(gl.TEXTURE1);
+
+    //gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, gl.NONE);
+    //gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.texImage2D(gl.TEXTURE_2D, 0, internalFormat, srcFormat, srcType, canvas);
+
+    gl.bindTexture(gl.TEXTURE_2D, textur);
+
+    gl.activeTexture(null);
 }
 
 async function draw() {
@@ -554,12 +610,23 @@ async function draw() {
     //gl.uniform1i(prog.uniformLocations.uSampler, 0);
     locc = gl.getUniformLocation(prog, "uSampler");
     gl.uniform1i(locc, 0);
+
     loccB = gl.getUniformLocation(prog, "uSamplerB");
     gl.uniform1i(loccB, 1);
+
+    //gl.activeTexture(gl.TEXTURE1);
+    
+    //gl.bindTexture(gl.TEXTURE_2D, canvasTexture);
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, paletteTexture);
 
     direction = 0.01;
     while(true)
     {
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, paletteTexture);
+        
         t += direction;
         //t = (new Date).getTime()
         gl.uniform1f(tLocc, t);
@@ -567,7 +634,11 @@ async function draw() {
         gl.uniform1f(yLocc, yOffset);
         gl.uniform1f(zoomLocc, zoom);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 5);
+
         await sleep(32);
+
+        // copy the canvas to a texture
+        UpdateTexture(gl, canvasTexture, glCanvas);
         // if (t >= 1.0) {
         //     direction = -0.01;
         // }
@@ -744,6 +815,7 @@ context.putImageData(imageDat,0,0);
                 <td><a onclick="seedOffset -= 1; requestNew= 1; RegenShaders();" class="button">Prev</a></td>
                 <td><a href="mailto:emorym@gmail.com?subject=A Cool One!&body=" id="share_link" class="button" style="display: none;">Share with Emory</a></td>
                 <td><a onclick="CopyLink();" class="button">Copy Link</a></td>
+                <td><a onclick="LoadEquation();" class="button">Load</a></td>
                 <td><a onclick="seedOffset += 1; requestNew= 1; RegenShaders();" class="button">Next</a></td>
             </tr>
         </table>
