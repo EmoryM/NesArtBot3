@@ -93,8 +93,6 @@ stolenFunctionsA = ["hash12(vec2(expr,expr))", "Hash(vec3(expr,expr,expr))",
 
 allFunctions = basicFunctions.concat(basicFunctions, angleAndTrigFunctions, exponentialFunctions, commonFunctions, geometricFunctions, signedDistanceFunctions, stolenFunctionsA);
 
-allFunctions.push("sR()")
-
 console.log(allFunctions);
 
 var grammar = {
@@ -126,9 +124,8 @@ var randomSeed = (new Date()).getTime();
 var seedOffset = 0;
 Math.seedrandom(randomSeed+seedOffset);
 var glCanvas = null;
-var paletteTexture = null;
-var canvasTexture = null;
-var drawing = true;
+var bufferCanvas = null;
+var bufferContext = null;
 
 function findGetParameter(parameterName) {
     var result = null,
@@ -429,7 +426,7 @@ function HandleMouseZoom(evt)
 function LoadShaderTemplate()
 {
     var client = new XMLHttpRequest();
-    client.open("GET", "shader.txt")
+    client.open("GET", "shader.glsl")
     client.onreadystatechange = function()
     {
         if(client.readyState==4)
@@ -450,6 +447,8 @@ function LoadGL()
 
     document.getElementById("urlText").value = "";
     glCanvas = document.getElementById("webgl");
+    bufferCanvas = document.getElementById("buffer");
+    bufferContext = bufferCanvas.getContext("2d");
 
     // touch movement - finger down, move, finger up
     // based on https://developer.mozilla.org/en-US/docs/Web/API/Touch_events
@@ -473,15 +472,11 @@ function LoadGL()
 		throw "Your web browser does not support WebGL!";
 	}
 
-    canvasTexture = InitTexture(gl);
-
     setTimeout(init, 100);
 }
 
 function RegenShaders(shaderText=null)
 {
-    drawing = false;
-
     Math.seedrandom(randomSeed+seedOffset+complexity);
 
     var vertexShader = "attribute vec3 pos;"+
@@ -531,8 +526,8 @@ function RegenShaders(shaderText=null)
     zoom = 1;
 
     paletteCanvas = document.getElementById("palette");
-    paletteTexture = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, paletteTexture);
+    texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, paletteCanvas);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
@@ -541,63 +536,16 @@ function RegenShaders(shaderText=null)
     // texture = loadTexture(gl, "texture1d.png");
 
     gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, paletteTexture);
+    gl.bindTexture(gl.TEXTURE_2D, texture);
 
     return prog;
-}
-
-function InitTexture(gl) {
-  const texture = gl.createTexture();
-  gl.bindTexture(gl.TEXTURE_2D, texture);
-
-  // Because video has to be download over the internet
-  // they might take a moment until it's ready so
-  // put a single pixel in the texture so we can
-  // use it immediately.
-  const level = 0;
-  const internalFormat = gl.RGBA;
-  const width = 512;
-  const height = 512;
-  const border = 0;
-  const srcFormat = gl.RGBA;
-  const srcType = gl.UNSIGNED_BYTE;
-  //const pixel = new Uint8Array([0, 0, 255, 255]);  // opaque blue
-  gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
-                width, height, border, srcFormat, srcType,
-                null);
-
-  // Turn off mips and set  wrapping to clamp to edge so it
-  // will work regardless of the dimensions of the video.
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-
-  return texture;
-}
-
-function UpdateTexture(gl, textur, canvas)
-{
-    const level = 0;
-    const internalFormat = gl.RGBA;
-    const srcFormat = gl.RGBA;
-    const srcType = gl.UNSIGNED_BYTE;
-    
-    gl.activeTexture(gl.TEXTURE1);
-
-    //gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, gl.NONE);
-    //gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-    gl.texImage2D(gl.TEXTURE_2D, 0, internalFormat, srcFormat, srcType, canvas);
-
-    gl.bindTexture(gl.TEXTURE_2D, textur);
-
-    gl.activeTexture(null);
 }
 
 async function draw() {
 	gl.clearColor(0.8, 0.8, 0.8, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    var prog = RegenShaders();    
+    var prog = RegenShaders();
 
 	attributeSetFloats(gl, prog, "pos", 3, [
 		-1, 1, 0,
@@ -607,26 +555,20 @@ async function draw() {
         -1, 1, 0
     ]);
 
-    //gl.uniform1i(prog.uniformLocations.uSampler, 0);
-    locc = gl.getUniformLocation(prog, "uSampler");
-    gl.uniform1i(locc, 0);
+    paletteSamplerLocation = gl.getUniformLocation(prog, "palette");
+    gl.uniform1i(paletteSamplerLocation, 0);
 
-    loccB = gl.getUniformLocation(prog, "uSamplerB");
-    gl.uniform1i(loccB, 1);
+    bufferSamplerLocation = gl.getUniformLocation(prog, "lastFrame");
+    gl.uniform1i(bufferSamplerLocation, 1);
 
-    //gl.activeTexture(gl.TEXTURE1);
-    
-    //gl.bindTexture(gl.TEXTURE_2D, canvasTexture);
-
-    gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, paletteTexture);
+    // create the buffer texture I think/hope
+    var bufferTexture = gl.createTexture();                                                 // create the texture
+    gl.bindTexture(gl.TEXTURE_2D, bufferTexture);                                           // bind it to ???
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, bufferCanvas);      // it's supposed to contain the canvas now I guess?
 
     direction = 0.01;
     while(true)
     {
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, paletteTexture);
-        
         t += direction;
         //t = (new Date).getTime()
         gl.uniform1f(tLocc, t);
@@ -635,16 +577,16 @@ async function draw() {
         gl.uniform1f(zoomLocc, zoom);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 5);
 
-        await sleep(32);
 
-        // copy the canvas to a texture
-        UpdateTexture(gl, canvasTexture, glCanvas);
-        // if (t >= 1.0) {
-        //     direction = -0.01;
-        // }
-        // if (t <= -1.0) {
-        //     direction = 0.01;
-        // }
+
+        // we can use this as a texture in the next pass (if I can get it to work)
+        bufferContext.drawImage(glCanvas, 0, 0);
+        // buffer to texture?
+        gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, bufferTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, bufferCanvas);
+
+        await sleep(32);
     }
 }
 
@@ -807,15 +749,14 @@ context.putImageData(imageDat,0,0);
     </script>
 
 <center>
-    <canvas id="webgl" width="512" height="512"></canvas><br>
-
+    <canvas id="webgl" width="512" height="512"></canvas><canvas id="buffer" width="512" height="512"></canvas><br>
     <center>
         <table>
             <tr>
                 <td><a onclick="seedOffset -= 1; requestNew= 1; RegenShaders();" class="button">Prev</a></td>
                 <td><a href="mailto:emorym@gmail.com?subject=A Cool One!&body=" id="share_link" class="button" style="display: none;">Share with Emory</a></td>
-                <td><a onclick="CopyLink();" class="button">Copy Link</a></td>
                 <td><a onclick="LoadEquation();" class="button">Load</a></td>
+                <td><a onclick="CopyLink();" class="button">Copy Link</a></td>
                 <td><a onclick="seedOffset += 1; requestNew= 1; RegenShaders();" class="button">Next</a></td>
             </tr>
         </table>
@@ -826,7 +767,7 @@ context.putImageData(imageDat,0,0);
         <tr width="512px">
             <td><input type="button" onclick="seedOffset -= 1; requestNew= 1; RegenShaders();" value="Prev" style="width: 100%;"/></td>
             <td><input type="button" onclick="seedOffset += 1; requestNew= 1; RegenShaders();" value="Next" style="width: 100%;"/></td>
-            <!--<td><form action="mailto:artbot@emorym.com"><input type="hidden" name="link" id="link"/><input type="submit" value="Share with Emory" style="width: 100%;"/></form></td>-->
+            <td><form action="mailto:artbot@emorym.com"><input type="hidden" name="link" id="link"/><input type="submit" value="Share with Emory" style="width: 100%;"/></form></td>
             <td><input type="button" onclick="CopyLink();" value="Copy Link" style="width: 100%;"/></td>
         </tr>
     </table>
@@ -838,6 +779,8 @@ context.putImageData(imageDat,0,0);
     Offsets: <span id="xOffset"></span>, <span id="yOffset"></span> -->
     <input type="text" value="" id="urlText"/>
     <center><canvas id="palette" width="16" height="2" style="width:16px; height:2px;"></canvas></center><br>
+
+    WHATWHATWHAT
 </center>
 </body>
 </html>
