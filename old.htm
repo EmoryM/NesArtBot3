@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Art Bot 3 v0.6</title>
+    <title>Art Bot 3 v0.7</title>
     <style>
             .button {
             background-color: #1c87c9;
@@ -18,10 +18,13 @@
             }
          </style>
 </head>
-<body onload="LoadGL();">
+
+
+<body onload="LoadShaderTemplate();">
         <script src="seedrandom.js"></script>
     <script type="text/javascript">
 
+        var shaderTemplate = null;
         var requestNew = 0;
         var showFunc = null;
 
@@ -59,14 +62,36 @@ geometricFunctions = ["length(vec2(expr,expr))", "distance(vec2(expr,expr),vec2(
 // from https://www.iquilezles.org/www/articles/distfunctions/distfunctions.htm
 // can always add more
 signedDistanceFunctions = ["sdSphere(vec3(expr,expr,expr),expr)", "sdBox(vec3(expr,expr,expr),expr)",
-    "sdRoundBox(vec3(expr,expr,expr),vec3(expr,expr,expr),expr)", "sdTorus(vec3(expr,expr,expr),vec2(expr,expr))"];
+    "sdRoundBox(vec3(expr,expr,expr),vec3(expr,expr,expr),expr)", "sdTorus(vec3(expr,expr,expr),vec2(expr,expr))",
+    "sdCappedTorus(vec3(expr,expr,expr),vec2(expr,expr),expr,expr)",
+    "sdLink(vec3(expr,expr,expr), expr, expr, expr)",
+    "sdCylinder(vec3(expr,expr,expr),vec3(expr,expr,expr))",
+    "sdCone(vec3(expr,expr,expr),vec2(expr,expr))",
+    "sdPlane(vec3(expr,expr,expr),vec4(expr,expr,expr,expr))",
+    "sdHexPrism(vec3(expr,expr,expr),vec2(expr,expr))",
+    "sdTriPrism(vec3(expr,expr,expr),vec2(expr,expr))",
+    "sdCapsule(vec3(expr,expr,expr),vec3(expr,expr,expr),vec3(expr,expr,expr),expr)",
+    "sdVerticalCapsule(vec3(expr,expr,expr),expr,expr)",
+    "sdCappedCylinder(vec3(expr,expr,expr),expr,expr)",
+    "sdRoundedCylinder(vec3(expr,expr,expr),expr,expr,expr)",
+    "sdCappedCone(vec3(expr,expr,expr),expr,expr,expr)",
+    "sdSolidAngle(vec3(expr,expr,expr), vec2(expr,expr), expr)",
+    "sdRoundCone(vec3(expr,expr,expr),expr,expr,expr)",
+    "sdEllipsoid(vec3(expr,expr,expr),vec3(expr,expr,expr))",
+    "sdOctahedron(vec3(expr,expr,expr),expr)"];
+
+// from https://www.shadertoy.com/view/WdtXWn
+stolenFunctionsA = ["hash12(vec2(expr,expr))", "Hash(vec3(expr,expr,expr))", 
+    "Noise3d(vec3(expr,expr,expr))", "pModPolar(vec2(expr,expr),expr)", "fOpUnionRound(expr,expr,expr)",
+    "smoothAdd(expr,expr,expr)",
+    "pyramid(vec3(expr,expr,expr),expr)", "snoise(vec3(expr,expr,expr))"]
 
 // @todo: sample from previous frame for CAs, etc.
 // miscFunctions = [ "sR()", "sG()", "sB()",                        // sample previous frame @ this position
 //    "sR(expr,expr)", "sG(expr,expr)", "sB(expr,expr)",          // sample previous frame @ x, y position
 //    "sRO(expr,expr))", "sGO(expr,expr)", "sBO(expr,expr)"];     // sample previous frame @ this position + offset
 
-allFunctions = basicFunctions.concat(basicFunctions, angleAndTrigFunctions, exponentialFunctions, commonFunctions, geometricFunctions, signedDistanceFunctions);
+allFunctions = basicFunctions.concat(basicFunctions, angleAndTrigFunctions, exponentialFunctions, commonFunctions, geometricFunctions, signedDistanceFunctions, stolenFunctionsA);
 
 console.log(allFunctions);
 
@@ -99,6 +124,8 @@ var randomSeed = (new Date()).getTime();
 var seedOffset = 0;
 Math.seedrandom(randomSeed+seedOffset);
 var glCanvas = null;
+var bufferCanvas = null;
+var bufferContext = null;
 
 function findGetParameter(parameterName) {
     var result = null,
@@ -396,6 +423,21 @@ function HandleMouseZoom(evt)
     }
 }
 
+function LoadShaderTemplate()
+{
+    var client = new XMLHttpRequest();
+    client.open("GET", "shader.glsl")
+    client.onreadystatechange = function()
+    {
+        if(client.readyState==4)
+        {
+            shaderTemplate = client.responseText;
+            LoadGL();
+        }
+    }
+    client.send();
+}
+
 function LoadGL()
 {
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) 
@@ -405,6 +447,8 @@ function LoadGL()
 
     document.getElementById("urlText").value = "";
     glCanvas = document.getElementById("webgl");
+    bufferCanvas = document.getElementById("buffer");
+    bufferContext = bufferCanvas.getContext("2d");
 
     // touch movement - finger down, move, finger up
     // based on https://developer.mozilla.org/en-US/docs/Web/API/Touch_events
@@ -427,6 +471,8 @@ function LoadGL()
 	} catch (err) {
 		throw "Your web browser does not support WebGL!";
 	}
+
+    setTimeout(init, 100);
 }
 
 function RegenShaders(shaderText=null)
@@ -464,76 +510,7 @@ function RegenShaders(shaderText=null)
     CreateLink();
     LoadPalette();
 
-    var fragmentShader = "precision highp float;" +
-        "uniform float t;" +
-        "uniform float xOffset;" +
-        "uniform float yOffset;" +
-        "uniform float zoom;" +
-        "uniform sampler2D uSampler;"+
-        "uniform sampler2D uSamplerB;"+
-        "float minPositiveFloat = 0.00006;"+
-        "float sR()"+
-        "{"+
-        "   float x = (zoom * (gl_FragCoord[0]))+xOffset;" +
-        "   float y = (zoom * (gl_FragCoord[1]))+yOffset;" +
-        "   return texture2D(uSamplerB, vec2(x,y)).r;"+
-        "}"+
-        "float satan(float a, float b)"+
-        "{"+
-        "   if(a==b && a==0.0)"+
-        "       return 1.0;"+
-        "   return atan(a,b);"+
-        "}"+
-        "float minp(float a)"+
-        "{"+
-        "   return max(minPositiveFloat,a);"+
-        "}"+
-        "float sclamp(float a, float b, float c)"+
-        "{"+
-        "   return clamp(a, min(b,c), max(b,c));"+
-        "}"+
-        "float ssmoothstep(float a, float b, float c)"+
-        "{"+
-        "   return smoothstep(min(a,b), max(a,b)+minPositiveFloat, c);"+
-        "}"+
-        "float sdBox(in vec3 p, in float b)" +
-        "{" +
-        "   vec3 d = abs(p) - b;" +
-        "   return length(max(d,0.0)) + min(max(d.x,max(d.y,d.z)),0.0);" +
-        "}" +
-        "float sdSphere(in vec3 p, in float r)" +
-        "{" +
-        "   return length(p)-r;" +
-        "}" +
-        "float sdRoundBox(in vec3 p, in vec3 b, in float r)"+
-        "{"+
-        "   vec3 q = abs(p) - b;"+
-        "   return length(max(q,0.0)) + min(max(q.x,max(q.y,q.z)),0.0)-r;"+
-        "}"+
-        "float sdTorus(in vec3 p, in vec2 r )"+
-        "{"+
-        "   vec2 q = vec2(length(p.xz)-r.x,p.y);"+
-        "   return length(q)-r.y;"+
-        "}"+
-        "void main() {" +
-        //"   float x = (gl_FragCoord[0]/250.0)-1.0;"+
-        //"   float y = (gl_FragCoord[1]/250.0)-1.0;"+
-        "   float x = (zoom * (gl_FragCoord[0]))+xOffset;" +
-        "   float y = (zoom * (gl_FragCoord[1]))+yOffset;" +
-        ///"   vec2 vTextureCoord = vec2(length(cross(vec3(x,x,x)*t, vec3(y,y,y))),1);" +
-        //"   vec2 vTextureCoord = vec2((t * x) / y, .5); " +
-        "   vec2 vTextureCoord = vec2(" + showFunc + ", .5); " +
-        //"   vec2 vTextureCoord = " + showFunc + ";" +
-        "   gl_FragColor = texture2D(uSampler, vTextureCoord);" +
-        //"   gl_FragColor = texture2D(uSampler, vec2(gl_FragCoord[0]/256.0, .5));" +
-        //"   gl_FragColor = vec4(x/256.0, y/256.0, 0, 1);" +
-        //"	gl_FragColor = " + showFunc + ";" +
-        "}"
-
-    //fragmentShader = "uniform sampler2D uSampler;" +
-    //    "void main() {" +
-    //    "vec2 vTextureCoord = vec2" +
-
+    var fragmentShader = shaderTemplate.replace("<<<showFunc>>>", showFunc);
 
     var prog = shaderProgram(gl, vertexShader,fragmentShader);
     gl.useProgram(prog);
@@ -568,7 +545,7 @@ async function draw() {
 	gl.clearColor(0.8, 0.8, 0.8, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    var prog = RegenShaders();    
+    var prog = RegenShaders();
 
 	attributeSetFloats(gl, prog, "pos", 3, [
 		-1, 1, 0,
@@ -578,11 +555,16 @@ async function draw() {
         -1, 1, 0
     ]);
 
-    //gl.uniform1i(prog.uniformLocations.uSampler, 0);
-    locc = gl.getUniformLocation(prog, "uSampler");
-    gl.uniform1i(locc, 0);
-    loccB = gl.getUniformLocation(prog, "uSamplerB");
-    gl.uniform1i(loccB, 1);
+    paletteSamplerLocation = gl.getUniformLocation(prog, "palette");
+    gl.uniform1i(paletteSamplerLocation, 0);
+
+    bufferSamplerLocation = gl.getUniformLocation(prog, "lastFrame");
+    gl.uniform1i(bufferSamplerLocation, 1);
+
+    // create the buffer texture I think/hope
+    var bufferTexture = gl.createTexture();                                                 // create the texture
+    gl.bindTexture(gl.TEXTURE_2D, bufferTexture);                                           // bind it to ???
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, bufferCanvas);      // it's supposed to contain the canvas now I guess?
 
     direction = 0.01;
     while(true)
@@ -594,13 +576,17 @@ async function draw() {
         gl.uniform1f(yLocc, yOffset);
         gl.uniform1f(zoomLocc, zoom);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 5);
+
+
+
+        // we can use this as a texture in the next pass (if I can get it to work)
+        bufferContext.drawImage(glCanvas, 0, 0);
+        // buffer to texture?
+        gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, bufferTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, bufferCanvas);
+
         await sleep(32);
-        // if (t >= 1.0) {
-        //     direction = -0.01;
-        // }
-        // if (t <= -1.0) {
-        //     direction = 0.01;
-        // }
     }
 }
 
@@ -611,16 +597,15 @@ function init() {
 		alert("Error: "+e);
 	}
 }
-setTimeout(init, 100);
 
 //document.onkeydown = checkKey;
 
 function ZoomIn()
 {
     oldZoom = zoom;
-    console.log(zoom);
+    //console.log(zoom);
     zoom = zoom * 0.9;
-    console.log(zoom);
+    //console.log(zoom);
     xOffset += (oldZoom * 250) - (zoom * 250);
     yOffset += (oldZoom * 250) - (zoom * 250);
 }
@@ -628,9 +613,9 @@ function ZoomIn()
 function ZoomOut()
 {
     oldZoom = zoom;
-    console.log(zoom);
+    //console.log(zoom);
     zoom = zoom / 0.9;
-    console.log(zoom);
+    //console.log(zoom);
     xOffset += (oldZoom * 250) - (zoom * 250);
     yOffset += (oldZoom * 250) - (zoom * 250);
 }
@@ -750,7 +735,7 @@ for(y = 0; y < 2; ++y)
         i = x+(y*16);
         j = Math.floor(Math.random() * colorArrays.length);
         col = colorArrays[j];
-        colorArrays.splice(j, 1);
+        //colorArrays.splice(j, 1);
         imageData[i*4] = col[0];
         imageData[(i*4)+1] = col[1];
         imageData[(i*4)+2] = col[2];
@@ -764,13 +749,13 @@ context.putImageData(imageDat,0,0);
     </script>
 
 <center>
-    <canvas id="webgl" width="512" height="512"></canvas><br>
-
+    <canvas id="webgl" width="512" height="512"></canvas><canvas id="buffer" width="512" height="512"></canvas><br>
     <center>
         <table>
             <tr>
                 <td><a onclick="seedOffset -= 1; requestNew= 1; RegenShaders();" class="button">Prev</a></td>
                 <td><a href="mailto:emorym@gmail.com?subject=A Cool One!&body=" id="share_link" class="button" style="display: none;">Share with Emory</a></td>
+                <td><a onclick="LoadEquation();" class="button">Load</a></td>
                 <td><a onclick="CopyLink();" class="button">Copy Link</a></td>
                 <td><a onclick="seedOffset += 1; requestNew= 1; RegenShaders();" class="button">Next</a></td>
             </tr>
@@ -782,7 +767,7 @@ context.putImageData(imageDat,0,0);
         <tr width="512px">
             <td><input type="button" onclick="seedOffset -= 1; requestNew= 1; RegenShaders();" value="Prev" style="width: 100%;"/></td>
             <td><input type="button" onclick="seedOffset += 1; requestNew= 1; RegenShaders();" value="Next" style="width: 100%;"/></td>
-            <!--<td><form action="mailto:artbot@emorym.com"><input type="hidden" name="link" id="link"/><input type="submit" value="Share with Emory" style="width: 100%;"/></form></td>-->
+            <td><form action="mailto:artbot@emorym.com"><input type="hidden" name="link" id="link"/><input type="submit" value="Share with Emory" style="width: 100%;"/></form></td>
             <td><input type="button" onclick="CopyLink();" value="Copy Link" style="width: 100%;"/></td>
         </tr>
     </table>
@@ -794,6 +779,8 @@ context.putImageData(imageDat,0,0);
     Offsets: <span id="xOffset"></span>, <span id="yOffset"></span> -->
     <input type="text" value="" id="urlText"/>
     <center><canvas id="palette" width="16" height="2" style="width:16px; height:2px;"></canvas></center><br>
+
+    WHATWHATWHAT
 </center>
 </body>
 </html>
