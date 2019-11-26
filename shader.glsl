@@ -14,7 +14,24 @@ uniform sampler2D palette;
 uniform sampler2D lastFrame;
 
 const float PI = 3.14159265359;
-float minPositiveFloat = 0.00006;
+float minPositiveFloat = 0.0006;
+
+float div(float a, float b)
+{
+    if(b==0.0)
+        return 0.0;
+    return a/b;
+}
+
+vec2 div(vec2 a, vec2 b)
+{
+    return vec2(div(a.x,b.x), div(a.y,b.y));
+}
+
+vec3 div(vec3 a, vec3 b)
+{
+    return vec3(div(a.x,b.x), div(a.y,b.y), div(a.z,b.z));
+}
 
 float satan(float a, float b)
 {
@@ -75,10 +92,10 @@ float Noise3d(vec3 p)
 }
 
 float pModPolar(vec2 p, float repetitions) {
-    float angle = 2./repetitions*PI;
+    float angle = div(2.0, repetitions*PI);
     float a = satan(p.y, p.x) + angle/2.;
     float r = length(p);
-    float c = floor(a/angle);
+    float c = floor(div(a,angle));
     a = mod(a, angle) - angle/2.;
     p = vec2(cos(a), sin(a))*r;
     if (abs(c) >= (repetitions/2.)) c = abs(c);
@@ -91,7 +108,7 @@ float fOpUnionRound(float a, float b, float r) {
 }
 
 float smoothAdd(float d1, float d2, float k) {
-    float h = clamp(0.5 + 0.5*(d2-d1)/k, 0.0, 1.0);
+    float h = clamp(0.5 + div(0.5*(d2-d1),k), 0.0, 1.0);
     return mix(d2, d1, h) - k*h*(1.0-h);
 }
 
@@ -246,7 +263,7 @@ float sdTriPrism(vec3 p, vec2 h)
 float sdCapsule(vec3 p, vec3 a, vec3 b, float r)
 {
     vec3 pa = p - a, ba = b - a;
-    float h = clamp(dot(pa, ba)/dot(ba, ba), 0.0, 1.0);
+    float h = clamp(div(dot(pa, ba),dot(ba, ba)), 0.0, 1.0);
     return length(pa - ba*h) - r;
 }
 
@@ -275,7 +292,7 @@ float sdCappedCone(vec3 p, float h, float r1, float r2)
     vec2 k1 = vec2(r2, h);
     vec2 k2 = vec2(r2-r1, 2.0*h);
     vec2 ca = vec2(q.x-min(q.x, (q.y<0.0)?r1:r2), abs(q.y)-h);
-    vec2 cb = q - k1 + k2*clamp(dot(k1-q, k2)/dot2(k2), 0.0, 1.0);
+    vec2 cb = q - k1 + k2*clamp(div(dot(k1-q, k2),dot2(k2)), 0.0, 1.0);
     float s = (cb.x<0.0 && ca.y<0.0) ? -1.0 : 1.0;
     return s*sqrt(min(dot2(ca), dot2(cb)));
 }
@@ -293,7 +310,7 @@ float sdRoundCone(vec3 p, float r1, float r2, float h)
 {
     vec2 q = vec2(length(p.xz), p.y);
 
-    float b = (r1-r2)/h;
+    float b = div((r1-r2),h);
     float a = sqrt(1.0-b*b);
     float k = dot(q, vec2(-b, a));
 
@@ -305,9 +322,9 @@ float sdRoundCone(vec3 p, float r1, float r2, float h)
 
 float sdEllipsoid(vec3 p, vec3 r)
 {
-    float k0 = length(p/r);
-    float k1 = length(p/(r*r));
-    return k0*(k0-1.0)/k1;
+    float k0 = length(div(p,r));
+    float k1 = length(div(p,(r*r)));
+    return div(k0*(k0-1.0),k1);
 }
 
 float sdOctahedron(vec3 p, float s)
