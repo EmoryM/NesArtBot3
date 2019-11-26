@@ -636,44 +636,26 @@
         gl.activeTexture(gl.TEXTURE2);
     }
 
-    function RegenShaders(shaderText=null)
+    function GetShaderText()
     {
-        // clear the backbuffer
-        backbuffer = false
-        bufferContext.fillStyle = "black";
-        bufferContext.fillRect(0, 0, bufferCanvas.width, bufferCanvas.height);
+        showFunc = null
 
-        //speed = 0.01;
-
-        Math.seedrandom(randomSeed+seedOffset+complexity);
-
-        var vertexShader = "attribute vec3 pos;"+
-            "void main() {"+
-            "	gl_Position = vec4(pos, 1.0);"+
-            "}"
-
-        offsetsInUrl = false
-
-        if (shaderText == null)
+        if (showFunc == null)
         {
             // if we aren't loading with the Load button check the get param
-            if (showFunc == null)
+            d = findGetParameter("d")
+            if(d != null)
             {
-                d = findGetParameter("d")
-                if(d != null)
+                d = JSON.parse(Decode(d))
+                console.log(d)
+                showFunc = d["f"]
+            }
+            else
+            {
+                showFunc = findGetParameter("equation")
+                if (showFunc != null)
                 {
-                    d = JSON.parse(Decode(d))
-                    console.log(d)
-                    showFunc = d["f"]
-                    offsetsInUrl = true
-                }
-                else
-                {
-                    showFunc = findGetParameter("equation")
-                    if (showFunc != null)
-                    {
-                        showFunc = Decode(showFunc);
-                    }
+                    showFunc = Decode(showFunc);
                 }
             }
 
@@ -685,33 +667,63 @@
                 showFunc = genExpr();
             }
         }
+
+        return showFunc;
+    }
+
+    function RegenShaders(shaderText=null, prog=null)
+    {
+        // clear the backbuffer
+        if(prog == null)
+        {
+            backbuffer = false
+
+            bufferContext.fillStyle = "black";
+            bufferContext.fillRect(0, 0, bufferCanvas.width, bufferCanvas.height);
+
+            gl.clearColor(0.0, 0.0, 0.0, 1);
+            gl.clear(gl.COLOR_BUFFER_BIT);
+
+            Math.seedrandom(randomSeed+seedOffset+complexity);
+        }
+
+        var vertexShader = "attribute vec3 pos;"+
+            "void main() {"+
+            "	gl_Position = vec4(pos, 1.0);"+
+            "}"
+
+        if(shaderText == null)
+            showFunc = GetShaderText()
         else
             showFunc = shaderText
 
-        document.getElementById("showfunc").value = showFunc;
-        equationText = document.getElementById("showfunc").value;
-        console.log(equationText);
+        //if(prog == null)
+        //{
+            CreateLink();
+            document.getElementById("showfunc").value = showFunc;
+            LoadPalette();
+            console.log(showFunc);
 
-        CreateLink();
-        LoadPalette();
+            // don't want to waste time if we don't need to
+            backbuffer = false;
+            for(i = 0; i < backbufferFunctions.length; ++i)
+            {
+                if(showFunc.includes(backbufferFunctions[i]))
+                    backbuffer = true;
+            }
 
-        // don't want to waste time if we don't need to
-        backbuffer = false;
-        for(i = 0; i < backbufferFunctions.length; ++i)
-        {
-            if(showFunc.includes(backbufferFunctions[i]))
-                backbuffer = true;
-        }
+            if(backbuffer)
+                console.log("backbuffered")
+            else
+                console.log("no backbuffer")
+        //}
 
-        if(backbuffer)
-            console.log("backbuffered")
-        else
-            console.log("no backbuffer")
 
-        var fragmentShader = shaderTemplate.replace("<<<showFunc>>>", equationText);
+        var fragmentShader = shaderTemplate.replace("<<<showFunc>>>", showFunc);
         //console.log(fragmentShader);
 
         var prog = shaderProgram(gl, vertexShader,fragmentShader);
+
         gl.useProgram(prog);
 
         xLocc = gl.getUniformLocation(prog, "xOffset");
@@ -722,15 +734,11 @@
         CreatePaletteTexture0();
         CreateBufferTexture1();
 
-        t = defValues["t"];
-        xOffset = defValues["x"];
-        yOffset = defValues["y"];
-        zoom = defValues["z"];
-
-        if(offsetsInUrl)
-            loadGetParameters();
-
-        console.log(xOffset, yOffset, zoom, t, speed)
+        xOffset = defValues["x"]
+        yOffset = defValues["y"]
+        zoom = defValues["z"]
+        t = defValues["t"]
+        speed = defValues["s"] / 10000.
 
         return prog;
     }
@@ -738,7 +746,7 @@
     function RenderingSetup(prog)
     {
         // ah yes, ERROR GREY
-        gl.clearColor(0.8, 0.8, 0.8, 1);
+        gl.clearColor(0.0, 0.0, 0.0, 1);
         gl.clear(gl.COLOR_BUFFER_BIT);
 
         attributeSetFloats(gl, prog, "pos", 3, [
@@ -777,7 +785,6 @@
 
             // copy the GL canvas to the buffer canvas
             bufferContext.drawImage(glCanvas, 0, 0);
-
 
             // set the buffer texture to the contents of the buffer canvas
             gl.activeTexture(gl.TEXTURE1);
@@ -900,7 +907,13 @@
         Math.seedrandom(randomSeed+seedOffset);
         prog = RegenShaders();
         RenderingSetup(prog);
-        //RegenShaders();
+        prog = RegenShaders(null, prog);
+
+        d = findGetParameter("d")
+        if(d!=null)
+            loadGetParameters();
+
+        console.log(xOffset, yOffset, zoom, t, speed)
         window.requestAnimationFrame(draw);
     }
 
@@ -914,6 +927,24 @@
         document.getElementById("xOffset").innerText = xOffset;
         document.getElementById("yOffset").innerText = yOffset;
         document.getElementById("speed").innerText = speed;
+        document.getElementById("time").innerText = t;
+    }
+
+    var scanning = false;
+    function Scan()
+    {
+        scanButton = document.getElementById("scanButton");
+
+        if(scanning)
+        {
+            seedOffset += 1; requestNew= 1; RegenShaders();
+            setTimeout(Scan, 5000)
+            scanButton.innerText = "Stop"
+        }
+        else
+        {
+            scanButton.innerText = "Scan"
+        }
     }
 
     function ResizeCanvas(multiplier)
@@ -962,6 +993,7 @@
                 <td><a onclick="seedOffset -= 1; requestNew= 1; RegenShaders();" class="button">Prev</a></td>
                 <td><a href="mailto:emorym@gmail.com?subject=A Cool One!&body=" id="share_link" class="button" style="display: none;">Share with Emory</a></td>
                 <td><a onclick="CopyLink();" class="button">Copy Link</a></td>
+                <td><a onclick="scanning = !scanning; Scan();" class="button" id="scanButton">Scan</a></td>
                 <td><a onclick="ToggleSecrets();" class="button">Debug</a></td>
                 <td><a onclick="seedOffset += 1; requestNew= 1; RegenShaders();" class="button">Next</a></td>
             </tr>
@@ -978,6 +1010,7 @@
         Zoom: <span id="zoom"></span><br>
         Offsets: <span id="xOffset"></span>, <span id="yOffset"></span><br>
         Speed: <span id="speed"></span><br>
+        Time: <span id="time"></span><br>
         <input type="text" value="" id="urlText"/>
         <center><canvas id="palette" width="16" height="2" style="width:16px; height:2px;"></canvas></center><br>
     </div>
