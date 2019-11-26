@@ -33,20 +33,25 @@ signedDistanceFunctions = ["sdSphere(vec3(expr,expr,expr),expr)", "sdBox(vec3(ex
     "sdSolidAngle(vec3(expr,expr,expr), vec2(expr,expr), expr)",
     "sdRoundCone(vec3(expr,expr,expr),expr,expr,expr)",
     "sdEllipsoid(vec3(expr,expr,expr),vec3(expr,expr,expr))",
-    "sdOctahedron(vec3(expr,expr,expr),expr)"];
+    "sdOctahedron(vec3(expr,expr,expr),expr)",
+    "sdAxisAlignedRect(vec2(expr,expr),vec2(expr,expr),vec2(expr,expr))",
+    "sdLineSegment(vec2(expr,expr),vec2(expr,expr),vec2(expr,expr),expr)"];
 
 // from https://www.shadertoy.com/view/WdtXWn
 stolenFunctionsA = ["hash12(vec2(expr,expr))", "Hash(vec3(expr,expr,expr))",
     "Noise3d(vec3(expr,expr,expr))", "pModPolar(vec2(expr,expr),expr)", "fOpUnionRound(expr,expr,expr)",
     "smoothAdd(expr,expr,expr)",
-    "pyramid(vec3(expr,expr,expr),expr)", "snoise(vec3(expr,expr,expr))"]
+    "pyramid(vec3(expr,expr,expr),expr)", "snoise(vec3(expr,expr,expr))",
+    "rand(vec2(expr,expr))", "gaussrand(vec2(expr,expr), vec3(expr,expr,expr), expr, expr)"]
+
+samplingFunctions = ["sR(expr,expr)", "sG(expr,expr)", "sB(expr,expr)"]
 
 // @todo: sample from previous frame for CAs, etc.
 // miscFunctions = [ "sR()", "sG()", "sB()",                        // sample previous frame @ this position
 //    "sR(expr,expr)", "sG(expr,expr)", "sB(expr,expr)",          // sample previous frame @ x, y position
 //    "sRO(expr,expr))", "sGO(expr,expr)", "sBO(expr,expr)"];     // sample previous frame @ this position + offset
 
-allFunctions = basicFunctions.concat(basicFunctions, angleAndTrigFunctions, exponentialFunctions, commonFunctions, geometricFunctions, signedDistanceFunctions, stolenFunctionsA);
+allFunctions = basicFunctions.concat(basicFunctions, angleAndTrigFunctions, exponentialFunctions, commonFunctions, geometricFunctions, signedDistanceFunctions, stolenFunctionsA, samplingFunctions);
 
 allFunctions.push("sR(expr,expr)");
 

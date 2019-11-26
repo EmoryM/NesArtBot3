@@ -3,8 +3,10 @@
 <head>
     <meta charset="utf-8" />
     <title>Art Bot 3 v0.8</title>
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
             .button {
+            font-family: 'Press Start 2P', cursive;
             background-color: #1c87c9;
             border: none;
             color: white;
@@ -12,16 +14,78 @@
             text-align: center;
             text-decoration: none;
             display: inline-block;
-            font-size: 20px;
+            /* font-size: 20px; */
             margin: 4px 2px;
             cursor: pointer;
+            }
+
+            .secret {
+                display: none;
+            }
+
+            .activebutt {
+              /* Start the shake animation and make the animation last for 0.5 seconds */
+              /* animation: shake 5.0s; */
+              /* animation: shadow-pulse 1s infinite; */
+              /* animation: pulse 5s infinite; */
+
+              /* When the animation is finished, start again */
+              /* animation-iteration-count: infinite; */
+              transform: rotate(15deg);
+            }
+
+            @keyframes pulse {
+            0% {
+                transform: scale(0.9);
+            }
+
+            70% {
+                transform: scale(1);
+            }
+
+            100% {
+                transform: scale(0.9);
+            }
+        }
+
+            @keyframes shadow-pulse
+            {
+                 0% {
+                      box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.2);
+                 }
+                 100% {
+                      box-shadow: 0 0 0 35px rgba(0, 0, 0, 0);
+                 }
+            }
+
+            @keyframes shake {
+              0% { transform: translate(1px, 1px) rotate(0deg); }
+              10% { transform: translate(-1px, -2px) rotate(-1deg); }
+              20% { transform: translate(-3px, 0px) rotate(1deg); }
+              30% { transform: translate(3px, 2px) rotate(0deg); }
+              40% { transform: translate(1px, -1px) rotate(1deg); }
+              50% { transform: translate(-1px, 2px) rotate(-1deg); }
+              60% { transform: translate(-3px, 1px) rotate(0deg); }
+              70% { transform: translate(3px, 1px) rotate(-1deg); }
+              80% { transform: translate(-1px, -1px) rotate(1deg); }
+              90% { transform: translate(1px, 2px) rotate(0deg); }
+              100% { transform: translate(1px, -2px) rotate(-1deg); }
+            }
+
+            .noselect {
+              -webkit-touch-callout: none; /* iOS Safari */
+                -webkit-user-select: none; /* Safari */
+                 -khtml-user-select: none; /* Konqueror HTML */
+                   -moz-user-select: none; /* Old versions of Firefox */
+                    -ms-user-select: none; /* Internet Explorer/Edge */
+                        user-select: none; /* Non-prefixed version, currently
+                                              supported by Chrome, Opera and Firefox */
             }
          </style>
 </head>
 
-<body onload="LoadShaderTemplate();">
+<body onload="LoadShaderTemplate();" style="background-color: black;">
 <script src="seedrandom.js"></script>
-
 <script type="text/javascript">
     var shaderTemplate = null;
     var requestNew = 0;
@@ -43,7 +107,13 @@
     var yOffset = 0;
     var xDelta = 0;
     var yDelta = 0;
-    var zoom = 1;
+    var zoom = 1.001;
+    var speed = 0.01;
+    var oldSpeed = 0.01;
+
+    var backbufferFunctions = ["sR", "sG", "sB"]
+    var backbuffer = true;
+    var bbStep = false;
 
     var ongoingTouches = [];
     var displayFunk = [1,1];
@@ -77,6 +147,28 @@
               if (tmp[0] === parameterName) result = tmp[1];
             });
         return result;
+    }
+
+    function loadGetParameters()
+    {
+        link_x = findGetParameter("x")
+        link_y = parseFloat(findGetParameter("y"))
+        link_z = parseFloat(findGetParameter("z"))
+        link_t = parseFloat(findGetParameter("t"))
+        link_s = parseFloat(findGetParameter("s")) / 10000.0
+
+        if(link_x != null)
+        {
+            xOffset = parseFloat(link_x)
+            yOffset = link_y
+            zoom = link_z
+            t = link_t
+            speed = link_s
+
+            console.log(xOffset, yOffset, zoom, t, speed)
+
+            document.getElementById("speedSlider").value = speed * 10000;
+        }
     }
 
     function shaderProgram(gl, vs, fs)
@@ -300,6 +392,7 @@
         //console.log(zoom);
         zoom = zoom * 0.9;
         //console.log(zoom);
+        console.log(xOffset)
         xOffset += (oldZoom * 250) - (zoom * 250);
         yOffset += (oldZoom * 250) - (zoom * 250);
     }
@@ -314,6 +407,18 @@
         yOffset += (oldZoom * 250) - (zoom * 250);
     }
 
+    function Encode(textData)
+    {
+        transformed = btoa(transformed)
+        return transformed
+    }
+
+    function Decode(textData)
+    {
+        transformed = atob(textData)
+        return transformed
+    }
+
     function CreateLink()
     {
         //CopyEquation();
@@ -324,7 +429,8 @@
         var lastChar = myUrl[myUrl.length-1]
         if(lastChar=="/")
             myUrl = myUrl.substring(0,myUrl.length-1)
-        newUrl = myUrl + "?equation=" + btoa(copyText);
+        myUrl = myUrl + "?x=" + xOffset.toFixed(2) + "&y=" + yOffset.toFixed(2) + "&z=" + zoom.toFixed(2) + "&t=" + t.toFixed(2) + "&s=" + Math.floor(speed*10000);
+        newUrl = myUrl + "&equation=" + Encode(copyText);
         // document.getElementById("link").value = newUrl;
         document.getElementById("share_link").href = "mailto:artbot@emorym.com?subject=A Cool One!&body=" + newUrl;
         return newUrl;
@@ -332,12 +438,17 @@
 
     function CopyLink()
     {
+        secrets = document.getElementById("secrets");
+        secrets.classList.remove("secret");
+
         var newUrl = CreateLink();
         var copyText = document.getElementById("urlText");
         document.getElementById("urlText").value = newUrl;
         copyText.select();
         copyText.setSelectionRange(0, 99999);
         document.execCommand("copy");
+
+        secrets.classList.add("secret");
     }
 
     function CopyEquation()
@@ -449,6 +560,7 @@
         {
             document.getElementById("share_link").style.display = "block";
         }
+        document.getElementById("share_link").style.display = "block";
 
         document.getElementById("urlText").value = "";
         glCanvas = document.getElementById("webgl");
@@ -518,12 +630,21 @@
 
     function RegenShaders(shaderText=null)
     {
+        // clear the backbuffer
+        backbuffer = false
+        bufferContext.fillStyle = "black";
+        bufferContext.fillRect(0, 0, bufferCanvas.width, bufferCanvas.height);
+
+        //speed = 0.01;
+
         Math.seedrandom(randomSeed+seedOffset+complexity);
 
         var vertexShader = "attribute vec3 pos;"+
             "void main() {"+
             "	gl_Position = vec4(pos, 1.0);"+
             "}"
+
+        offsetsInUrl = false
 
         if (shaderText == null)
         {
@@ -533,7 +654,8 @@
                 showFunc = findGetParameter("equation")
                 if (showFunc != null)
                 {
-                    showFunc = atob(showFunc);
+                    offsetsInUrl = true
+                    showFunc = Decode(showFunc);
                 }
             }
 
@@ -554,8 +676,21 @@
         CreateLink();
         LoadPalette();
 
+        // don't want to waste time if we don't need to
+        backbuffer = false;
+        for(i = 0; i < backbufferFunctions.length; ++i)
+        {
+            if(showFunc.includes(backbufferFunctions[i]))
+                backbuffer = true;
+        }
+
+        if(backbuffer)
+            console.log("backbuffered")
+        else
+            console.log("no backbuffer")
+
         var fragmentShader = shaderTemplate.replace("<<<showFunc>>>", showFunc);
-        console.log(fragmentShader);
+        //console.log(fragmentShader);
 
         var prog = shaderProgram(gl, vertexShader,fragmentShader);
         gl.useProgram(prog);
@@ -566,9 +701,12 @@
         zoomLocc = gl.getUniformLocation(prog, "zoom");
 
         t = 0;
-        xOffset = -250;
-        yOffset = -250;
-        zoom = 1;
+        xOffset = -250.1;
+        yOffset = -250.1;
+        zoom = 1.001;
+
+        if(offsetsInUrl)
+            loadGetParameters();
 
         CreatePaletteTexture0();
         CreateBufferTexture1();
@@ -582,7 +720,6 @@
         gl.clearColor(0.8, 0.8, 0.8, 1);
         gl.clear(gl.COLOR_BUFFER_BIT);
 
-        var prog = RegenShaders();
         prog = RegenShaders();
 
         attributeSetFloats(gl, prog, "pos", 3, [
@@ -608,7 +745,7 @@
         gl.clear(gl.COLOR_BUFFER_BIT);
 
         // set shader values
-        t += 0.01;
+        t += speed;
         gl.uniform1f(tLocc, t);
         gl.uniform1f(xLocc, xOffset);
         gl.uniform1f(yLocc, yOffset);
@@ -617,16 +754,127 @@
         // perform the drawing
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 5);
 
-        // copy the GL canvas to the buffer canvas
-        bufferContext.drawImage(glCanvas, 0, 0);
+        if((speed != 0 || bbStep) && backbuffer)
+        {
+            bbStep = false;
 
-        // set the buffer texture to the contents of the buffer canvas
-        gl.activeTexture(gl.TEXTURE1);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, bufferCanvas);
-        gl.activeTexture(gl.TEXTURE0);
-        // gl.bindTexture(gl.TEXTURE_2D, bufferTexture);
+            // copy the GL canvas to the buffer canvas
+            bufferContext.drawImage(glCanvas, 0, 0);
+
+
+            // set the buffer texture to the contents of the buffer canvas
+            gl.activeTexture(gl.TEXTURE1);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, bufferCanvas);
+            gl.activeTexture(gl.TEXTURE0);
+        }
 
         window.requestAnimationFrame(draw);
+    }
+
+    function PlayPause()
+    {
+        if(speed == 0)
+        {
+            speed = oldSpeed;
+        }
+        else
+        {
+            oldSpeed = speed;
+            speed = 0;
+        }
+    }
+
+    function Rewind()
+    {
+        if(speed == 0)
+        {
+            t -= Math.abs(oldSpeed);
+            bbStep = true;
+        }
+        else
+        {
+            //speed = Math.min(-0.01, speed - 0.01);
+            speed = -1.0 * Math.abs(speed);
+        }
+    }
+
+    function FastForward()
+    {
+        if(speed == 0)
+        {
+            t += Math.abs(oldSpeed);
+            bbStep = true;
+        }
+        else
+        {
+            //speed = Math.max(0.02, speed + 0.01);
+            speed = Math.abs(speed);
+        }
+    }
+
+    function SlowDown()
+    {
+        if(speed == 0)
+        {
+            if(Math.abs(oldSpeed * 0.5)>0.00000001)
+                oldSpeed *= 0.5;
+        }
+        else
+        {
+            if(Math.abs(speed * 0.5)>0.00000001)
+                speed *= 0.5;
+        }
+    }
+
+    function SpeedUp()
+    {
+        if(speed == 0)
+            oldSpeed *= 2.0;
+        else
+            speed = speed * 2.0;
+    }
+
+    function AssignStyles()
+    {
+        slowdown = document.getElementById("slowdown");
+        rewind = document.getElementById("rewind");
+        playpause = document.getElementById("playpause");
+        fastforward = document.getElementById("fastforward");
+        speedup = document.getElementById("speedup");
+
+        eS = speed == 0 ? oldSpeed : speed;
+
+        if(speed==0)
+            playpause.classList.remove("activebutt");
+        else
+            playpause.classList.add("activebutt");
+
+        if(Math.abs(eS)<0.0075)
+        {
+            slowdown.classList.add("activebutt");
+            speedup.classList.remove("activebutt");
+        }
+        else if(Math.abs(eS)>0.015)
+        {
+            slowdown.classList.remove("activebutt");
+            speedup.classList.add("activebutt");
+        }
+        else
+        {
+            slowdown.classList.remove("activebutt");
+            speedup.classList.remove("activebutt");
+        }
+
+        if(eS>0)
+        {
+            fastforward.classList.add("activebutt");
+            rewind.classList.remove("activebutt");
+        }
+        else
+        {
+            fastforward.classList.remove("activebutt");
+            rewind.classList.add("activebutt");
+        }
     }
 
     function Init()
@@ -634,46 +882,75 @@
         Math.seedrandom(randomSeed+seedOffset);
         LoadGL();
         RenderingSetup();
-        RegenShaders();
+        //RegenShaders();
         draw();
+    }
+
+    buttons = null;
+
+    function ResizeCanvas(multiplier)
+    {
+        s = Math.floor(512.0*multiplier);
+        glCanvas.style.width = s + "px";
+        glCanvas.style.height = s + "px";
+
+        if(buttons==null)
+        {
+            buttons = document.getElementsByClassName("button")
+            console.log(buttons);
+            console.log(buttons.length);
+        }
+
+        fs = Math.floor(20.0*multiplier);
+
+        for(i=0; i<buttons.length; ++i)
+        {
+            buttons[i].style.fontSize = fs + "px";
+        }
     }
 </script>
 <script src="generator.js"></script>
 
 <center>
-    <canvas id="webgl" width="512" height="512"></canvas>
-    <canvas id="buffer" width="512" height="512" style="display:none;"></canvas><br>
+    <div class="slidecontainer" style="width: 512px;">
+      <input type="range" min="100.0" max="200.0" value="100.0" class="slider" id="sizeSlider" style="width: 512px;" onpointermove="ResizeCanvas(this.value/100.0);" onchange="ResizeCanvas(this.value/100.0);">
+    </div>
+    <canvas id="webgl" width="512" height="512" style="height: 512px; width: 512px; image-rendering: pixelated;"></canvas>
     <center>
+        <table style="display: none;">
+            <tr width="512px">
+                <td><div style="font-size: 40px; cursor: pointer;" onclick="SlowDown(); AssignStyles();" class="noselect" id="slowdown">🐢</div></td>
+                <td><div style="font-size: 40px; cursor: pointer;" onclick="Rewind(); AssignStyles();" class="noselect" id="rewind">⏪</div></td>
+                <td><div style="font-size: 40px; cursor: pointer;" onclick="PlayPause(); AssignStyles();" class="noselect activebutt" id="playpause">⏯</div></td>
+                <td><div style="font-size: 40px; cursor: pointer;" onclick="FastForward(); AssignStyles();" class="noselect activebutt" id="fastforward">⏩</div></td>
+                <td><div style="font-size: 40px; cursor: pointer;" onclick="SpeedUp(); AssignStyles();" class="noselect" id="speedup">🐇</div></td>
+            </tr>
+        </table>
+        <div class="slidecontainer" style="width: 512px;">
+          <input type="range" min="-100.0" max="100.0" value="100.0" class="slider" id="speedSlider" style="width: 512px;" onpointermove="speed=this.value/10000.0; return false;" onchange="speed=this.value/10000.0; return false;">
+        </div>
         <table>
             <tr>
                 <td><a onclick="seedOffset -= 1; requestNew= 1; RegenShaders();" class="button">Prev</a></td>
                 <td><a href="mailto:emorym@gmail.com?subject=A Cool One!&body=" id="share_link" class="button" style="display: none;">Share with Emory</a></td>
-                <td><a onclick="LoadEquation();" class="button">Load</a></td>
                 <td><a onclick="CopyLink();" class="button">Copy Link</a></td>
                 <td><a onclick="seedOffset += 1; requestNew= 1; RegenShaders();" class="button">Next</a></td>
             </tr>
         </table>
     </center>
-
-
-    <table style="display: none;">
-        <tr width="512px">
-            <td><input type="button" onclick="seedOffset -= 1; requestNew= 1; RegenShaders();" value="Prev" style="width: 100%;"/></td>
-            <td><input type="button" onclick="seedOffset += 1; requestNew= 1; RegenShaders();" value="Next" style="width: 100%;"/></td>
-            <td><form action="mailto:artbot@emorym.com"><input type="hidden" name="link" id="link"/><input type="submit" value="Share with Emory" style="width: 100%;"/></form></td>
-            <td><input type="button" onclick="CopyLink();" value="Copy Link" style="width: 100%;"/></td>
-        </tr>
-    </table>
-    <br>
-    Complexity: <input type="text" value="140" onchange="complexity=Number(this.value);"/>
-    <br>
-    <textarea rows="4" cols="50" id="showfunc"/></textarea><br>
-    <!-- Zoom: <span id="zoom"></span><br>
-    Offsets: <span id="xOffset"></span>, <span id="yOffset"></span> -->
-    <input type="text" value="" id="urlText"/>
-    <center><canvas id="palette" width="16" height="2" style="width:16px; height:2px;"></canvas></center><br>
-
-    WHATWHATWHAT
+    <div id="secrets" class="secret">
+        <canvas id="buffer" width="512" height="512"></canvas><br>
+        <br>
+        Complexity: <input type="text" value="140" onchange="complexity=Number(this.value);"/>
+        <br>
+        <textarea rows="10" cols="100" id="showfunc"/></textarea><br>
+        <a onclick="LoadEquation();" class="button">Load</a><br>
+        Zoom: <span id="zoom"></span><br>
+        Offsets: <span id="xOffset"></span>, <span id="yOffset"></span><br>
+        Speed: <span id="speed"></span><br>
+        <input type="text" value="" id="urlText"/>
+        <center><canvas id="palette" width="16" height="2" style="width:16px; height:2px;"></canvas></center><br>
+    </div>
 </center>
 </body>
 </html>

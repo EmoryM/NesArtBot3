@@ -140,9 +140,14 @@ float sR(float x, float y)
     return texture2D(lastFrame, vec2(x,y)).r;
 }
 
-float sG()
+float sG(float x, float y)
 {
-    return texture2D(lastFrame, vec2(gl_FragCoord[0], gl_FragCoord[1])).g;
+    return texture2D(lastFrame, vec2(x,y)).g;
+}
+
+float sB(float x, float y)
+{
+    return texture2D(lastFrame, vec2(x,y)).b;
 }
 
 float satan(float a, float b)
@@ -309,6 +314,73 @@ float sdOctahedron(vec3 p, float s)
 {
     p = abs(p);
     return (p.x+p.y+p.z-s)*0.57735027;
+}
+
+float sdAxisAlignedRect(vec2 uv, vec2 tl, vec2 br)
+{
+    vec2 d = max(tl - uv, uv - br);
+    return length(max(vec2(0.0), d)) + min(0.0, max(d.x, d.y));
+}
+
+mat2 rot2D(float r)
+{
+    float c = cos(r), s = sin(r);
+    return mat2(c, s, -s, c);
+}
+
+float sdLineSegment(vec2 uv, vec2 a, vec2 b, float lineWidth)
+{
+    vec2 rectDimensions = b - a;
+    float angle = atan(rectDimensions.x, rectDimensions.y);
+    mat2 rotMat = rot2D(-angle);
+    a *= rotMat;
+    b *= rotMat;
+    float halfLineWidth = lineWidth / 2.;
+    a -= halfLineWidth;
+    b += halfLineWidth;
+    return sdAxisAlignedRect(uv * rotMat, a, b);
+}
+
+float rand(vec2 co)
+{
+  // This one-liner can be found in many places, including:
+  // http://stackoverflow.com/questions/4200224/random-noise-functions-for-glsl
+  // I can't find any explanation for it, but experimentally it does seem to
+  // produce approximately uniformly distributed values in the interval [0,1].
+  float r = fract(sin(dot(co.xy, vec2(12.9898,78.233))) * 43758.5453);
+
+  // Make sure that we don't return 0.0
+  if(r == 0.0)
+    return 0.000000000001;
+  else
+    return r;
+}
+
+float gaussrand(vec2 co, vec3 offsets, float mean, float stddev)
+{
+  // Box-Muller method for sampling from the normal distribution
+  // http://en.wikipedia.org/wiki/Normal_distribution#Generating_values_from_normal_distribution
+  // This method requires 2 uniform random inputs and produces 2
+  // Gaussian random outputs.  We'll take a 3rd random variable and use it to
+  // switch between the two outputs.
+
+  float U, V, R, Z;
+  // Add in the CPU-supplied random offsets to generate the 3 random values that
+  // we'll use.
+  U = rand(co + vec2(offsets.x, offsets.x));
+  V = rand(co + vec2(offsets.y, offsets.y));
+  R = rand(co + vec2(offsets.z, offsets.z));
+  // Switch between the two random outputs.
+  if(R < 0.5)
+    Z = sqrt(-2.0 * log(U)) * sin(2.0 * PI * V);
+  else
+    Z = sqrt(-2.0 * log(U)) * cos(2.0 * PI * V);
+
+  // Apply the stddev and mean.
+  Z = Z * stddev + mean;
+
+  // Return it as a vec4, to be added to the input ("true") color.
+  return Z;
 }
 
 void main() {
