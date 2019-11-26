@@ -16,6 +16,26 @@ uniform sampler2D lastFrame;
 const float PI = 3.14159265359;
 float minPositiveFloat = 0.0006;
 
+float ssqrt(float a)
+{
+    return sqrt(abs(a));
+}
+
+float sinversesqrt(float a)
+{
+    if(a<=0.0)
+    {
+        return inversesqrt(abs(a)+minPositiveFloat);
+    }
+
+    return inversesqrt(a);
+}
+
+vec4 sinversesqrt(vec4 a)
+{
+    return vec4(sinversesqrt(a.x), sinversesqrt(a.y), sinversesqrt(a.z), sinversesqrt(a.w));
+}
+
 float div(float a, float b)
 {
     if(b==0.0)
@@ -154,7 +174,7 @@ float snoise(vec3 v){
     vec3 p1 = vec3(a0.zw, h.y);
     vec3 p2 = vec3(a1.xy, h.z);
     vec3 p3 = vec3(a1.zw, h.w);
-    vec4 norm = inversesqrt(vec4(dot(p0, p0), dot(p1, p1), dot(p2, p2), dot(p3, p3)));
+    vec4 norm = sinversesqrt(vec4(dot(p0, p0), dot(p1, p1), dot(p2, p2), dot(p3, p3)));
     p0 *= norm.x;
     p1 *= norm.y;
     p2 *= norm.z;
@@ -216,7 +236,7 @@ float sdCappedTorus(vec3 p, vec2 sc, float ra, float rb)
 {
     p.x = abs(p.x);
     float k = (sc.y*p.x>sc.x*p.y) ? dot(p.xy, sc) : length(p.xy);
-    return sqrt(dot(p, p) + ra*ra - 2.0*ra*k) - rb;
+    return ssqrt(dot(p, p) + ra*ra - 2.0*ra*k) - rb;
 }
 
 float sdLink(vec3 p, float le, float r1, float r2)
@@ -294,7 +314,7 @@ float sdCappedCone(vec3 p, float h, float r1, float r2)
     vec2 ca = vec2(q.x-min(q.x, (q.y<0.0)?r1:r2), abs(q.y)-h);
     vec2 cb = q - k1 + k2*clamp(div(dot(k1-q, k2),dot2(k2)), 0.0, 1.0);
     float s = (cb.x<0.0 && ca.y<0.0) ? -1.0 : 1.0;
-    return s*sqrt(min(dot2(ca), dot2(cb)));
+    return s*ssqrt(min(dot2(ca), dot2(cb)));
 }
 
 float sdSolidAngle(vec3 p, vec2 c, float ra)
@@ -302,7 +322,7 @@ float sdSolidAngle(vec3 p, vec2 c, float ra)
     // c is the sin/cos of the angle
     vec2 q = vec2(length(p.xz), p.y);
     float l = length(q) - ra;
-    float m = length(q - c*clamp(dot(q, c), 0.0, ra));
+    float m = length(q - c*sclamp(dot(q, c), 0.0, ra));
     return max(l, m*sign(c.y*q.x-c.x*q.y));
 }
 
@@ -311,7 +331,7 @@ float sdRoundCone(vec3 p, float r1, float r2, float h)
     vec2 q = vec2(length(p.xz), p.y);
 
     float b = div((r1-r2),h);
-    float a = sqrt(1.0-b*b);
+    float a = ssqrt(1.0-b*b);
     float k = dot(q, vec2(-b, a));
 
     if (k < 0.0) return length(q) - r1;
@@ -389,9 +409,9 @@ float gaussrand(vec2 co, vec3 offsets, float mean, float stddev)
   R = rand(co + vec2(offsets.z, offsets.z));
   // Switch between the two random outputs.
   if(R < 0.5)
-    Z = sqrt(-2.0 * log(U)) * sin(2.0 * PI * V);
+    Z = ssqrt(-2.0 * log(U)) * sin(2.0 * PI * V);
   else
-    Z = sqrt(-2.0 * log(U)) * cos(2.0 * PI * V);
+    Z = ssqrt(-2.0 * log(U)) * cos(2.0 * PI * V);
 
   // Apply the stddev and mean.
   Z = Z * stddev + mean;
