@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Art Bot 3 v0.8</title>
+    <title>Art Bot 3 v0.9</title>
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
             .button {
@@ -890,6 +890,16 @@
 
     buttons = null;
 
+    function ToggleSecrets()
+    {
+        secrets = document.getElementById('secrets');
+        secrets.classList.toggle("secret");
+        document.getElementById("zoom").innerText = zoom;
+        document.getElementById("xOffset").innerText = xOffset;
+        document.getElementById("yOffset").innerText = yOffset;
+        document.getElementById("speed").innerText = speed;
+    }
+
     function ResizeCanvas(multiplier)
     {
         s = Math.floor(512.0*multiplier);
@@ -936,11 +946,13 @@
                 <td><a onclick="seedOffset -= 1; requestNew= 1; RegenShaders();" class="button">Prev</a></td>
                 <td><a href="mailto:emorym@gmail.com?subject=A Cool One!&body=" id="share_link" class="button" style="display: none;">Share with Emory</a></td>
                 <td><a onclick="CopyLink();" class="button">Copy Link</a></td>
+                <td><a onclick="ToggleSecrets();" class="button">Debug</a></td>
                 <td><a onclick="seedOffset += 1; requestNew= 1; RegenShaders();" class="button">Next</a></td>
             </tr>
         </table>
     </center>
-    <div id="secrets" class="secret">
+    <div id="secrets" class="secret" style="background-color: white;">
+        Back buffer
         <canvas id="buffer" width="512" height="512"></canvas><br>
         <br>
         Complexity: <input type="text" value="140" onchange="complexity=Number(this.value);"/>
