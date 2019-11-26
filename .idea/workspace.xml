@@ -27,8 +27,8 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="6" column="26" lean-forward="false" selection-start-line="6" selection-start-column="26" selection-end-line="6" selection-end-column="26" />
+            <state relative-caret-position="482">
+              <caret line="750" column="0" lean-forward="true" selection-start-line="750" selection-start-column="0" selection-end-line="750" selection-end-column="0" />
               <folding>
                 <element signature="n#style#0;n#div#1;n#center#0;n#body#0;n#html#0;n#!!top" expanded="true" />
               </folding>
@@ -50,36 +50,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>document.</find>
-      <find>document.find</find>
-      <find>document.get</find>
-      <find>zoom =</find>
-      <find>btoa</find>
-      <find>atob</find>
-      <find>Decode</find>
-      <find>.js</find>
-      <find>Encode</find>
-      <find>gzip</find>
-      <find>transformed</find>
-      <find>.remove</find>
-      <find>.remove(&quot;secrets</find>
-      <find>seedOffset</find>
-      <find>ToggleSecrets</find>
-      <find>function Toggle</find>
-      <find>xOffset</find>
-      <find>ToggleDeb</find>
-      <find>dot</find>
-      <find>atan</find>
-      <find>scalm</find>
-      <find>atan(expr</find>
-      <find>satan</find>
-      <find>/</find>
-      <find>div</find>
-      <find>satan(</find>
-      <find>inversesqrt</find>
-      <find>sdRoundCone</find>
       <find>ssmoothstep</find>
       <find>sqrt</find>
+      <find>loadGetPa</find>
+      <find>findGetParamet</find>
+      <find>JSON.</find>
+      <find>loadGetParameters</find>
+      <find>showFunc =</find>
+      <find>speed</find>
+      <find>d[&quot;x</find>
+      <find>&quot;s&quot;</find>
+      <find>d[&quot;x&quot;]</find>
+      <find>&quot;x&quot;:</find>
+      <find>CreateLink</find>
+      <find>xOffset</find>
+      <find>-250</find>
+      <find>function draw</find>
+      <find>requestAnimat</find>
+      <find>Init</find>
+      <find>LoadEquation()</find>
+      <find>shaderText</find>
+      <find>gl.userPro</find>
+      <find>LoadShaderTemplate</find>
+      <find>LoadGL()</find>
+      <find>LoadPalette</find>
+      <find>LoadGL</find>
+      <find>Init()</find>
+      <find>RenderingSetup</find>
+      <find>RegenShaders</find>
+      <find>loadGetPar</find>
+      <find>loadGetPara</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -97,7 +97,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-7" />
+    <option name="x" value="1017" />
     <option name="width" value="1038" />
     <option name="height" value="1119" />
   </component>
@@ -230,7 +230,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="0" width="1038" height="1119" extended-state="1" />
+    <frame x="1017" y="0" width="1038" height="1119" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27198365" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -377,8 +377,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="6" column="26" lean-forward="false" selection-start-line="6" selection-start-column="26" selection-end-line="6" selection-end-column="26" />
+        <state relative-caret-position="482">
+          <caret line="750" column="0" lean-forward="true" selection-start-line="750" selection-start-column="0" selection-end-line="750" selection-end-column="0" />
           <folding>
             <element signature="n#style#0;n#div#1;n#center#0;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>

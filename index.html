@@ -113,6 +113,8 @@
     var speed = 0.01;
     var oldSpeed = 0.01;
 
+    var defValues = {"x": -250.01, "y": -250.01, "z": 1.001, "s": 100.0, "t": 0.0}
+
     var backbufferFunctions = ["sR", "sG", "sB"]
     var backbuffer = true;
     var bbStep = false;
@@ -153,22 +155,16 @@
 
     function loadGetParameters()
     {
-        link_x = findGetParameter("x")
-        link_y = parseFloat(findGetParameter("y"))
-        link_z = parseFloat(findGetParameter("z"))
-        link_t = parseFloat(findGetParameter("t"))
-        link_s = parseFloat(findGetParameter("s")) / 10000.0
+        d = findGetParameter("d")
 
-        if(link_x != null)
+        if(d != null)
         {
-            xOffset = parseFloat(link_x)
-            yOffset = link_y
-            zoom = link_z
-            t = link_t
-            speed = link_s
-
-            console.log(xOffset, yOffset, zoom, t, speed)
-
+            d = JSON.parse(Decode(d))
+            xOffset = parseFloat(d["x"])
+            yOffset = parseFloat(d["y"])
+            zoom = parseFloat(d["z"])
+            t = parseFloat(d["t"])
+            speed = parseFloat(d["s"]) / 10000.0;
             document.getElementById("speedSlider").value = speed * 10000;
         }
     }
@@ -431,8 +427,18 @@
         var lastChar = myUrl[myUrl.length-1]
         if(lastChar=="/")
             myUrl = myUrl.substring(0,myUrl.length-1)
-        myUrl = myUrl + "?x=" + xOffset.toFixed(2) + "&y=" + yOffset.toFixed(2) + "&z=" + zoom.toFixed(2) + "&t=" + t.toFixed(2) + "&s=" + Math.floor(speed*10000);
-        newUrl = myUrl + "&equation=" + Encode(copyText);
+
+        if(backbuffer)
+        {
+            d = defValues
+            d["f"] = copyText
+        }
+        else
+        {
+            d = {"x": xOffset.toFixed(2), "y": yOffset.toFixed(2), "z": zoom.toFixed(2), "t": t.toFixed(2), "s": Math.floor(speed * 10000), "f": copyText}
+        }
+        d = JSON.stringify(d)
+        newUrl = myUrl + "?d=" + Encode(d);
         // document.getElementById("link").value = newUrl;
         document.getElementById("share_link").href = "mailto:artbot@emorym.com?subject=A Cool One!&body=" + newUrl;
         return newUrl;
@@ -653,11 +659,21 @@
             // if we aren't loading with the Load button check the get param
             if (showFunc == null)
             {
-                showFunc = findGetParameter("equation")
-                if (showFunc != null)
+                d = findGetParameter("d")
+                if(d != null)
                 {
+                    d = JSON.parse(Decode(d))
+                    console.log(d)
+                    showFunc = d["f"]
                     offsetsInUrl = true
-                    showFunc = Decode(showFunc);
+                }
+                else
+                {
+                    showFunc = findGetParameter("equation")
+                    if (showFunc != null)
+                    {
+                        showFunc = Decode(showFunc);
+                    }
                 }
             }
 
@@ -673,7 +689,8 @@
             showFunc = shaderText
 
         document.getElementById("showfunc").value = showFunc;
-        equationText = showFunc;
+        equationText = document.getElementById("showfunc").value;
+        console.log(equationText);
 
         CreateLink();
         LoadPalette();
@@ -691,7 +708,7 @@
         else
             console.log("no backbuffer")
 
-        var fragmentShader = shaderTemplate.replace("<<<showFunc>>>", showFunc);
+        var fragmentShader = shaderTemplate.replace("<<<showFunc>>>", equationText);
         //console.log(fragmentShader);
 
         var prog = shaderProgram(gl, vertexShader,fragmentShader);
@@ -702,27 +719,27 @@
         tLocc = gl.getUniformLocation(prog, "t");
         zoomLocc = gl.getUniformLocation(prog, "zoom");
 
-        t = 0;
-        xOffset = -250.1;
-        yOffset = -250.1;
-        zoom = 1.001;
+        CreatePaletteTexture0();
+        CreateBufferTexture1();
+
+        t = defValues["t"];
+        xOffset = defValues["x"];
+        yOffset = defValues["y"];
+        zoom = defValues["z"];
 
         if(offsetsInUrl)
             loadGetParameters();
 
-        CreatePaletteTexture0();
-        CreateBufferTexture1();
+        console.log(xOffset, yOffset, zoom, t, speed)
 
         return prog;
     }
 
-    function RenderingSetup()
+    function RenderingSetup(prog)
     {
         // ah yes, ERROR GREY
         gl.clearColor(0.8, 0.8, 0.8, 1);
         gl.clear(gl.COLOR_BUFFER_BIT);
-
-        prog = RegenShaders();
 
         attributeSetFloats(gl, prog, "pos", 3, [
             -1, 1, 0,
@@ -737,8 +754,6 @@
 
         bufferSamplerLocation = gl.getUniformLocation(prog, "lastFrame");
         gl.uniform1i(bufferSamplerLocation, 1);
-
-        draw();
     }
 
     function draw()
@@ -881,11 +896,12 @@
 
     function Init()
     {
-        Math.seedrandom(randomSeed+seedOffset);
         LoadGL();
-        RenderingSetup();
+        Math.seedrandom(randomSeed+seedOffset);
+        prog = RegenShaders();
+        RenderingSetup(prog);
         //RegenShaders();
-        draw();
+        window.requestAnimationFrame(draw);
     }
 
     buttons = null;
