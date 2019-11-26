@@ -35,7 +35,7 @@ vec3 div(vec3 a, vec3 b)
 
 float satan(float a, float b)
 {
-    if (a==b && a==0.0)
+    if (a==0.0)
         return 1.0;
     return atan(a, b);
 }
