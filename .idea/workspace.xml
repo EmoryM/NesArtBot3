@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6435d9c5-2eca-45fe-b7ec-e771fdcfd013" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/generator.js" afterPath="$PROJECT_DIR$/generator.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/shader.glsl" afterPath="$PROJECT_DIR$/shader.glsl" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,8 +18,8 @@
       <file leaf-file-name="shader.glsl" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/shader.glsl">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-80">
-              <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+            <state relative-caret-position="275">
+              <caret line="171" column="65" lean-forward="false" selection-start-line="171" selection-start-column="65" selection-end-line="171" selection-end-column="65" />
               <folding />
             </state>
           </provider>
@@ -39,8 +40,8 @@
       <file leaf-file-name="generator.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/generator.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="295">
-              <caret line="47" column="0" lean-forward="true" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
+            <state relative-caret-position="80">
+              <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -50,11 +51,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>speed</find>
-      <find>xLocc</find>
-      <find>loadGetParameters</find>
-      <find>Init()</find>
-      <find>no backbuffer</find>
       <find>RenderingSetup</find>
       <find>RegenShaders</find>
       <find>val</find>
@@ -80,6 +76,11 @@
       <find>function Toggle</find>
       <find>xOffset</find>
       <find>ToggleDeb</find>
+      <find>dot</find>
+      <find>atan(expr</find>
+      <find>atan</find>
+      <find>sdRoundCone</find>
+      <find>scalm</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -89,10 +90,10 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/saner.htm" />
-        <option value="$PROJECT_DIR$/generator.js" />
-        <option value="$PROJECT_DIR$/shader.glsl" />
         <option value="$PROJECT_DIR$/index.htm" />
         <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/generator.js" />
+        <option value="$PROJECT_DIR$/shader.glsl" />
       </list>
     </option>
   </component>
@@ -344,14 +345,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/shader.txt" />
     <entry file="file://$PROJECT_DIR$/saner.htm" />
-    <entry file="file://$PROJECT_DIR$/generator.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="295">
-          <caret line="47" column="0" lean-forward="true" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/gzip.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="80">
@@ -378,10 +371,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/generator.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="80">
+          <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/shader.glsl">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-80">
-          <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+        <state relative-caret-position="275">
+          <caret line="171" column="65" lean-forward="false" selection-start-line="171" selection-start-column="65" selection-end-line="171" selection-end-column="65" />
           <folding />
         </state>
       </provider>

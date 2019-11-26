@@ -16,6 +16,18 @@ uniform sampler2D lastFrame;
 const float PI = 3.14159265359;
 float minPositiveFloat = 0.00006;
 
+float satan(float a, float b)
+{
+    if (a==b && a==0.0)
+        return 1.0;
+    return atan(a, b);
+}
+
+float sclamp(float a, float b, float c)
+{
+    return clamp(a, min(b, c), max(b, c));
+}
+
 float dot2(vec3 v)
 {
     return dot(v, v);
@@ -64,7 +76,7 @@ float Noise3d(vec3 p)
 
 float pModPolar(vec2 p, float repetitions) {
     float angle = 2./repetitions*PI;
-    float a = atan(p.y, p.x) + angle/2.;
+    float a = satan(p.y, p.x) + angle/2.;
     float r = length(p);
     float c = floor(a/angle);
     a = mod(a, angle) - angle/2.;
@@ -150,26 +162,14 @@ float sB(float x, float y)
     return texture2D(lastFrame, vec2(x,y)).b;
 }
 
-float satan(float a, float b)
-{
-    if (a==b && a==0.0)
-    return 1.0;
-    return atan(a, b);
-}
-
 float minp(float a)
 {
     return max(minPositiveFloat, a);
 }
 
-float sclamp(float a, float b, float c)
-{
-    return clamp(a, min(b, c), max(b, c));
-}
-
 float ssmoothstep(float a, float b, float c)
 {
-    return smoothstep(min(a, b), max(a, b)+minPositiveFloat, c);
+    return smoothstep(min(a, b), max(a, b)+minPositiveFloat, sclamp(c, min(a,b), max(a,b) + minPositiveFloat));
 }
 
 float sdBox(in vec3 p, in float b)
@@ -331,7 +331,7 @@ mat2 rot2D(float r)
 float sdLineSegment(vec2 uv, vec2 a, vec2 b, float lineWidth)
 {
     vec2 rectDimensions = b - a;
-    float angle = atan(rectDimensions.x, rectDimensions.y);
+    float angle = satan(rectDimensions.x, rectDimensions.y);
     mat2 rotMat = rot2D(-angle);
     a *= rotMat;
     b *= rotMat;

@@ -58,17 +58,6 @@ allFunctions.push("sR(expr,expr)");
 console.log(allFunctions);
 
 var grammar = {
-    //'expr': function() { return ['Math.cos(expr)','Math.sin(expr)','expr-expr','expr*expr','expr+expr','expr%expr','Math.abs(expr)','Math.sqrt(expr)','Math.floor(expr)','Math.ceil(expr)','Math.max(expr,expr)','Math.min(expr,expr)','Math.atan2(expr,expr)','sigmoid(expr)','sigmoidd(expr)','Math.pow(expr,expr)','Math.exp(expr)', 'PerlinNoise.noise(expr,expr,expr)', 'Dist(expr,expr,expr,expr)', 'Sign(expr)'].random(); },
-    // 'expr': function() { return ['expr+expr', 'expr-expr', 'expr*expr',
-    // 'radians(expr)', 'degrees(expr)', 'sin(expr)', 'cos(expr)', 'tan(expr)',
-    // 'asin(clamp(expr,-1.0,1.0))', 'acos(expr)', 'atan(expr,expr)', 'atan(expr)', 'pow(expr,expr)',
-    // 'exp(expr)', 'log(expr)', 'exp2(expr)', 'log2(expr)', 'sqrt(expr)',
-    // 'inversesqrt(expr)', 'abs(expr)', 'floor(expr)', 'ceil(expr)', 'mod(expr,expr)',
-    // 'min(expr,expr)', 'max(expr,expr)', 'clamp(expr,expr,expr)', 'mix(expr,expr,expr)',
-    // 'step(expr,expr)', 'smoothstep(expr,expr,expr)', 'length(vec2(expr,expr))',
-    // 'distance(vec2(expr,expr),vec2(expr,expr))', 'dot(vec2(expr,expr),vec2(expr,expr))',
-    // 'sdSphere(vec3(expr,expr,expr),expr)', 'sdBox(vec3(expr,expr,expr),expr)',
-    // 'sdTorus(vec3(expr,expr,expr),vec2(expr,expr))', 'sign(expr)'].random(); },
     "expr": function() { return allFunctions.random(); },
     'number': function() { return (10*Math.random()).toFixed(2) },
     'var': function() {
