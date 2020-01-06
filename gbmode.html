@@ -89,7 +89,8 @@
 <body onload="LoadShaderTemplate();" style="background-color: black;">
 <script src="seedrandom.js"></script>
 <script type="text/javascript">
-    var gbMode = false;
+    var gbMode = true;
+    var canvasSize = 128;
     var shaderTemplate = null;
     var requestNew = 0;
     var showFunc = null;
@@ -114,7 +115,7 @@
     var speed = 0.01;
     var oldSpeed = 0.01;
 
-    var defValues = {"x": -250.01, "y": -250.01, "z": 1.001, "s": 100.0, "t": 0.0}
+    var defValues = {"x": -(canvasSize/2.0), "y": -(canvasSize/2.0), "z": 1.001, "s": 100.0, "t": 0.0}
 
     var backbufferFunctions = ["sR", "sG", "sB"]
     var backbuffer = true;
@@ -392,8 +393,8 @@
         zoom = zoom * 0.9;
         //console.log(zoom);
         console.log(xOffset)
-        xOffset += (oldZoom * 250) - (zoom * 250);
-        yOffset += (oldZoom * 250) - (zoom * 250);
+        xOffset += (oldZoom * (canvasSize/2.0)) - (zoom * (canvasSize/2.0));
+        yOffset += (oldZoom * (canvasSize/2.0)) - (zoom * (canvasSize/2.0));
     }
 
     function ZoomOut()
@@ -402,8 +403,8 @@
         //console.log(zoom);
         zoom = zoom / 0.9;
         //console.log(zoom);
-        xOffset += (oldZoom * 250) - (zoom * 250);
-        yOffset += (oldZoom * 250) - (zoom * 250);
+        xOffset += (oldZoom * (canvasSize/2.0)) - (zoom * (canvasSize/2.0));
+        yOffset += (oldZoom * (canvasSize/2.0)) - (zoom * (canvasSize/2.0));
     }
 
     function Encode(textData)
@@ -555,18 +556,39 @@
             xs = 0;
         }
 
+        p = Math.floor(Math.random()*5)+2
+        p = Math.floor(Math.pow(2.0,p))
+
         canvas = document.getElementById("palette");
+        canvas.width = p
         context = canvas.getContext('2d');
         context.fillStyle = "black";
         context.fillRect(0, 0, canvas.width, canvas.height);
         imageDat = context.getImageData(0,0,canvas.width,canvas.height);
         imageData = imageDat.data;
 
+        <!--for(y = 0; y < 2; ++y)-->
+        <!--{-->
+            <!--for(x = xs; x < 16; ++x)-->
+            <!--{-->
+                <!--i = x+(y*16);-->
+
+            <!--}-->
+        <!--}-->
+
+        // snes mode
         for(y = 0; y < 2; ++y)
         {
-            for(x = xs; x < 16; ++x)
+            for(x = xs; x < p; ++x)
             {
-                i = x+(y*16);
+                i = x+(y*p);
+
+                // SNES
+                <!--imageData[i*4] = Math.floor(Math.floor(Math.random()*16.0) * 16);-->
+                <!--imageData[(i*4)+1] = Math.floor(Math.floor(Math.random()*16.0) * 16);-->
+                <!--imageData[(i*4)+2] = Math.floor(Math.floor(Math.random()*16.0) * 16);-->
+                <!--imageData[(i*4)+3] = 255;-->
+
                 j = Math.floor(Math.random() * colorArrays.length);
                 col = colorArrays[j];
                 //colorArrays.splice(j, 1);
@@ -921,6 +943,13 @@
 
     function Init()
     {
+        canvas1 = document.getElementById("webgl")
+        canvas2 = document.getElementById("buffer")
+        canvas1.width = canvasSize
+        canvas1.height = canvasSize
+        canvas2.width = canvasSize
+        canvas2.height = canvasSize
+
         LoadGL();
         Math.seedrandom(randomSeed+seedOffset);
         prog = RegenShaders();
@@ -967,7 +996,7 @@
 
     function ResizeCanvas(multiplier)
     {
-        s = Math.floor(512.0*multiplier);
+        s = Math.floor(canvasSize*multiplier);
         glCanvas.style.width = s + "px";
         glCanvas.style.height = s + "px";
 
@@ -990,9 +1019,9 @@
 
 <center>
     <div class="slidecontainer" style="width: 512px;">
-      <input type="range" min="100.0" max="200.0" value="100.0" class="slider" id="sizeSlider" style="width: 512px;" onpointermove="ResizeCanvas(this.value/100.0);" onchange="ResizeCanvas(this.value/100.0);">
+      <input type="range" min="100.0" max="800.0" value="100.0" class="slider" id="sizeSlider" style="width: 512px;" onpointermove="ResizeCanvas(this.value/100.0);" onchange="ResizeCanvas(this.value/100.0);">
     </div>
-    <canvas id="webgl" width="512" height="512" style="height: 512px; width: 512px; image-rendering: pixelated;"></canvas>
+    <canvas id="webgl" width="128" height="128" style="height: 512px; width: 512px; image-rendering: pixelated;"></canvas>
     <center>
         <table style="display: none;">
             <tr width="512px">
@@ -1030,7 +1059,7 @@
         Speed: <span id="speed"></span><br>
         Time: <span id="time"></span><br>
         <input type="text" value="" id="urlText"/>
-        <center><canvas id="palette" width="16" height="2" style="width:16px; height:2px;"></canvas></center><br>
+        <center><canvas id="palette" width="8" height="2" style="width:16px; height:2px;"></canvas></center><br>
     </div>
 </center>
 </body>
