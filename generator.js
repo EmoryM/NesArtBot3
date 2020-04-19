@@ -64,7 +64,7 @@ var grammar = {
     'number': function() { return (10*Math.random()).toFixed(2) },
     'var': function() {
         var result = ['x','y','t'].random();
-        if(Math.random() < 0.01)
+        if(Math.random() < 0.001)
             result = ['lR()','lG()','lB()'].random();
 
         if(result == 't')
