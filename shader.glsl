@@ -244,6 +244,7 @@ float snoise(vec3 v){
     return .5 + 12.0 * dot(m, vec4(dot(p0, x0), dot(p1, x1), dot(p2, x2), dot(p3, x3)));
 }
 
+// these require a backbuffer - they're reading data from the previous frame
 float sR(float x, float y)
 {
     return texture2D(lastFrame, vec2(x,y)).r;
@@ -257,6 +258,22 @@ float sG(float x, float y)
 float sB(float x, float y)
 {
     return texture2D(lastFrame, vec2(x,y)).b;
+}
+
+// terrible way to do this
+float lR()
+{
+    return texture2D(lastFrame, vec2(gl_FragCoord[0], gl_FragCoord[1])).r;
+}
+
+float lG()
+{
+    return texture2D(lastFrame, vec2(gl_FragCoord[0], gl_FragCoord[1])).g;
+}
+
+float lB()
+{
+    return texture2D(lastFrame, vec2(gl_FragCoord[0], gl_FragCoord[1])).b;
 }
 
 float minp(float a)

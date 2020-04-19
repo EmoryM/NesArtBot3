@@ -121,7 +121,7 @@
 
     var defValues = {"x": -250.01, "y": -250.01, "z": 1.001, "s": 100.0, "t": 0.0}
 
-    var backbufferFunctions = ["sR", "sG", "sB"]
+    var backbufferFunctions = ["sR", "sG", "sB", "lR", "lG", "lB"]
     var backbuffer = true;
     var bbStep = false;
 
@@ -166,7 +166,7 @@
         if(d != null)
         {
             d = JSON.parse(Decode(d))
-            console.log(d);
+            //console.log(d);
             xOffset = parseFloat(d["x"])
             yOffset = parseFloat(d["y"])
             zoom = parseFloat(d["z"])
@@ -389,7 +389,7 @@
     {
         oldZoom = zoom;
         zoom = zoom * 0.9;
-        console.log(xOffset)
+        //console.log(xOffset)
         xOffset += (oldZoom * 250) - (zoom * 250);
         yOffset += (oldZoom * 250) - (zoom * 250);
         if(zoom == 0)
@@ -409,13 +409,13 @@
     function Encode(textData)
     {
         transformed = btoa(textData)
-        console.log(textData);
+        //console.log(textData);
         return transformed
     }
 
     function Decode(textData)
     {
-        console.log(textData);
+        //console.log(textData);
         transformed = atob(textData)
         //console.log(transformed)
         return transformed
@@ -431,6 +431,8 @@
         var encodedData = Encode(jsonData);
         var myUrl = location.protocol + '//' + location.host;
 
+        console.log(myUrl);
+
         var lastChar = myUrl[myUrl.length-1]
         while(lastChar=="/")
         {
@@ -441,7 +443,8 @@
 
         // TERRIBLE SOLUTION
         var result = myUrl + "/NesArtBot3?d=" + encodedData;
-        //var result = myUrl + "?d=" + encodedData;
+        if(myUrl.includes("localhost"))
+            result = myUrl + "?d=" + encodedData;
 
         //console.log(encodedData);
         //console.log(Decode(encodedData));
@@ -748,7 +751,18 @@
         var fragmentShader = shaderTemplate.replace("<<<showFunc>>>", showFunc);
         //console.log(fragmentShader);
 
-        console.log(fragmentShader);
+        /*if(showFunc.includes("lR()"))
+        {
+            alert("lR()!")
+        }
+        else if(showFunc.includes("lG()"))
+        {
+            alert("lG()!")
+        }
+        else if(showFunc.includes("lB()"))
+        {
+            alert("lB()!")
+        }*/
 
         var prog = shaderProgram(gl, vertexShader,fragmentShader);
 
