@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8" />
     <title>NES Art Bot</title>
-    <!-- 3.0.984 -->
+    <!-- 3.0.985 -->
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap" rel="stylesheet">
     <script
   src="https://code.jquery.com/jquery-3.5.0.slim.min.js"
@@ -440,8 +440,8 @@
         }
 
         // TERRIBLE SOLUTION
-        var result = myUrl + "/NesArtBot3?d=" + encodedData;
-        //var result = myUrl + "?d=" + encodedData;
+        //var result = myUrl + "/NesArtBot3?d=" + encodedData;
+        var result = myUrl + "?d=" + encodedData;
 
         //console.log(encodedData);
         //console.log(Decode(encodedData));
@@ -1047,13 +1047,13 @@
         </div>
         <table>
             <tr>
-                <td><a onclick="seedOffset -= 1; requestNew= 1; RegenShaders(); UpdateURL();" class="button">Prev</a></td>
+                <td><a onclick="seedOffset -= 1; requestNew= 1; RegenShaders(); UpdateURL();" class="button" id="backButton"><u>B</u>ack</a></td>
                 <!-- <td><a onclick="UpdateShareHref();" href="mailto:emorym@gmail.com?subject=A Cool One!&body=" id="share_link" class="button" style="display: none;">Share with Emory</a></td> -->
                 <!-- <td><a onclick="Share();" class="button" id="share_link">Share?</a></td> -->
                 <td><a onclick="CopyLink();" class="button">📋</a></td>
                 <td><a onclick="scanning = !scanning; Scan();" class="button" id="scanButton">Scan</a></td>
                 <td><a onclick="ToggleSecrets();" class="button">Debug</a></td>
-                <td><a onclick="seedOffset += 1; requestNew= 1; RegenShaders(); UpdateURL();" class="button">Next</a></td>
+                <td><a onclick="seedOffset += 1; requestNew= 1; RegenShaders(); UpdateURL();" class="button" id="nextButton"><u>N</u>ext</a></td>
             </tr>
         </table>
     </center>
@@ -1095,6 +1095,20 @@
     }
 
     setTimeout(UpdateURL, 1000);
+
+    $(document).on("keypress", function (e) 
+    {
+        // are these universal?
+        if(e.which == 110)
+        {
+            $("#nextButton").click();
+        }
+        else if(e.which == 98)
+        {
+            $("#backButton").click();
+        }
+    // use e.which
+    });
 </script>
 </body>
 </html>
