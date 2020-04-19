@@ -1,10 +1,10 @@
-<!-- 10pm+ goof off project, no promises regarding quality -->
+<!-- 3am goof off project, no promises regarding quality -->
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Art Bot 3 v0.935</title>
+    <title>Art Bot 3 v0.95</title>
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
             .button {
@@ -161,6 +161,7 @@
         if(d != null)
         {
             d = JSON.parse(Decode(d))
+            console.log(d);
             xOffset = parseFloat(d["x"])
             yOffset = parseFloat(d["y"])
             zoom = parseFloat(d["z"])
@@ -354,12 +355,6 @@
     function HandleMouseZoom(evt)
     {
         evt.preventDefault();
-        //oldZoom = zoom;
-        //console.log(zoom);
-        //zoom = zoom - (0.001 * evt.deltaY);
-        //console.log(zoom);
-        //xOffset += (oldZoom * 250) - (zoom * 250);
-        //yOffset += (oldZoom * 250) - (zoom * 250);
         if(evt.deltaY < 0)
         {
             ZoomIn();
@@ -388,9 +383,7 @@
     function ZoomIn()
     {
         oldZoom = zoom;
-        //console.log(zoom);
         zoom = zoom * 0.9;
-        //console.log(zoom);
         console.log(xOffset)
         xOffset += (oldZoom * 250) - (zoom * 250);
         yOffset += (oldZoom * 250) - (zoom * 250);
@@ -399,9 +392,7 @@
     function ZoomOut()
     {
         oldZoom = zoom;
-        //console.log(zoom);
         zoom = zoom / 0.9;
-        //console.log(zoom);
         xOffset += (oldZoom * 250) - (zoom * 250);
         yOffset += (oldZoom * 250) - (zoom * 250);
     }
@@ -409,59 +400,61 @@
     function Encode(textData)
     {
         transformed = btoa(textData)
+        console.log(textData);
         return transformed
     }
 
     function Decode(textData)
     {
+        console.log(textData);
         transformed = atob(textData)
+        //console.log(transformed)
         return transformed
     }
 
+    // do 1 thing and do it correctly
     function CreateLink()
     {
-        //CopyEquation();
-        var copyText = document.getElementById("showfunc").value;
+        var equation = document.getElementById("showfunc").value;
+        var data = {"x": xOffset.toFixed(2), "y": yOffset.toFixed(2), "z": zoom.toFixed(2), "t": t.toFixed(2), "s": Math.floor(speed * 10000), "f": equation, "se": randomSeed, "so": seedOffset};
+        console.log(data);
+        var jsonData = JSON.stringify(data);
+        var encodedData = Encode(jsonData);
         var myUrl = location.protocol + '//' + location.host;
-        console.log(myUrl)
-        myUrl += location.pathname;
+
         var lastChar = myUrl[myUrl.length-1]
         if(lastChar=="/")
             myUrl = myUrl.substring(0,myUrl.length-1)
 
-        if(backbuffer)
-        {
-            d = defValues
-            d["f"] = copyText
-        }
-        else
-        {
-            d = {"x": xOffset.toFixed(2), "y": yOffset.toFixed(2), "z": zoom.toFixed(2), "t": t.toFixed(2), "s": Math.floor(speed * 10000), "f": copyText}
-        }
-        d = JSON.stringify(d)
-        newUrl = myUrl + "?d=" + Encode(d);
-        // document.getElementById("link").value = newUrl;
-        document.getElementById("share_link").href = "mailto:artbot@emorym.com?subject=A Cool One!&body=" + newUrl;
-        return newUrl;
+        var result = myUrl + "?d=" + encodedData;
+        console.log(result);
+
+        console.log(encodedData);
+        console.log(Decode(encodedData));
+        return result;
     }
 
+    // wonky!
     function CopyLink()
     {
         secrets = document.getElementById("secrets");
         secrets.classList.remove("secret");
 
         var newUrl = CreateLink();
-        var copyText = document.getElementById("urlText");
-        document.getElementById("urlText").value = newUrl;
-        copyText.select();
-        copyText.setSelectionRange(0, 99999);
+        UpdateURL();
+        console.log(newUrl);
+        var textElement = document.getElementById("urlText");
+        textElement.value = newUrl;
+        console.log(textElement.value);
+        textElement.select();
+        textElement.setSelectionRange(0, 99999);
         document.execCommand("copy");
-
         secrets.classList.add("secret");
     }
 
     function CopyEquation()
     {
+        UpdateURL();
         var copyText = document.getElementById("showfunc");
         copyText.select();
         copyText.setSelectionRange(0, 99999);
@@ -472,6 +465,7 @@
     {
         var copyText = document.getElementById("showfunc").value;
         RegenShaders(copyText);
+        UpdateURL();
     }
 
     var gbColors =
@@ -582,11 +576,11 @@
 
     function LoadGL()
     {
-        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) )
+        /*if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) )
         {
             document.getElementById("share_link").style.display = "block";
         }
-        document.getElementById("share_link").style.display = "block";
+        document.getElementById("share_link").style.display = "block";*/
 
         document.getElementById("urlText").value = "";
         glCanvas = document.getElementById("webgl");
@@ -717,7 +711,7 @@
 
         //if(prog == null)
         //{
-            CreateLink();
+            //CreateLink();
             document.getElementById("showfunc").value = showFunc;
             LoadPalette();
             console.log(showFunc);
@@ -752,11 +746,11 @@
         CreatePaletteTexture0();
         CreateBufferTexture1();
 
-        xOffset = defValues["x"]
-        yOffset = defValues["y"]
-        zoom = defValues["z"]
-        t = defValues["t"]
-        speed = defValues["s"] / 10000.
+        // xOffset = defValues["x"]
+        // yOffset = defValues["y"]
+        // zoom = defValues["z"]
+        // t = defValues["t"]
+        // speed = defValues["s"] / 10000.
 
         return prog;
     }
@@ -956,6 +950,7 @@
         if(scanning)
         {
             seedOffset += 1; requestNew= 1; RegenShaders();
+            UpdateURL();
             setTimeout(Scan, 5000)
             scanButton.innerText = "Stop"
         }
@@ -963,6 +958,14 @@
         {
             scanButton.innerText = "Scan"
         }
+    }
+
+    function Share()
+    {
+
+        //shareLink = "mailto:emorym@gmail.com?subject=A Cool One!&body=" + CreateLink();
+        //window.location = shareLink;
+        Toggle(document.getElementById("share-options"));
     }
 
     function ResizeCanvas(multiplier)
@@ -984,6 +987,25 @@
         {
             buttons[i].style.fontSize = fs + "px";
         }
+    }
+
+    function Toggle(whatever)
+    {
+        if(whatever.style["display"] == "none")
+        {
+            whatever.style["display"] = "block";
+        }
+        else
+        {
+            whatever.style["display"] = "none";
+        }
+    }
+
+    function UpdateURL()
+    {
+        var newUrl = CreateLink();
+        state = {"href": newUrl};
+        window.history.replaceState(state, '', newUrl);
     }
 </script>
 <script src="generator.js"></script>
@@ -1008,12 +1030,13 @@
         </div>
         <table>
             <tr>
-                <td><a onclick="seedOffset -= 1; requestNew= 1; RegenShaders();" class="button">Prev</a></td>
-                <td><a href="mailto:emorym@gmail.com?subject=A Cool One!&body=" id="share_link" class="button" style="display: none;">Share with Emory</a></td>
+                <td><a onclick="seedOffset -= 1; requestNew= 1; RegenShaders(); UpdateURL();" class="button">Prev</a></td>
+                <!-- <td><a onclick="UpdateShareHref();" href="mailto:emorym@gmail.com?subject=A Cool One!&body=" id="share_link" class="button" style="display: none;">Share with Emory</a></td> -->
+                <!-- <td><a onclick="Share();" class="button" id="share_link">Share?</a></td> -->
                 <td><a onclick="CopyLink();" class="button">Copy Link</a></td>
                 <td><a onclick="scanning = !scanning; Scan();" class="button" id="scanButton">Scan</a></td>
                 <td><a onclick="ToggleSecrets();" class="button">Debug</a></td>
-                <td><a onclick="seedOffset += 1; requestNew= 1; RegenShaders();" class="button">Next</a></td>
+                <td><a onclick="seedOffset += 1; requestNew= 1; RegenShaders(); UpdateURL();" class="button">Next</a></td>
             </tr>
         </table>
     </center>
@@ -1032,6 +1055,12 @@
         <input type="text" value="" id="urlText"/>
         <center><canvas id="palette" width="16" height="2" style="width:16px; height:2px;"></canvas></center><br>
     </div>
+
+        <div id="share-options">
+    <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-via="NintendoArtBot" data-lang="en" data-show-count="false" id="twitter_share_link">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
 </center>
 </body>
+<script>
+    </script>
 </html>
