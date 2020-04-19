@@ -431,7 +431,7 @@
         if(lastChar=="/")
             myUrl = myUrl.substring(0,myUrl.length-1)
 
-        var result = myUrl + "/NesArtBot3/?d=" + encodedData;
+        var result = myUrl + "/NesArtBot3?d=" + encodedData;
 
         //console.log(encodedData);
         //console.log(Decode(encodedData));
@@ -1037,7 +1037,7 @@
                 <td><a onclick="seedOffset -= 1; requestNew= 1; RegenShaders(); UpdateURL();" class="button">Prev</a></td>
                 <!-- <td><a onclick="UpdateShareHref();" href="mailto:emorym@gmail.com?subject=A Cool One!&body=" id="share_link" class="button" style="display: none;">Share with Emory</a></td> -->
                 <!-- <td><a onclick="Share();" class="button" id="share_link">Share?</a></td> -->
-                <td><a onclick="CopyLink();" class="button">Copy Link</a></td>
+                <td><a onclick="CopyLink();" class="button">📋</a></td>
                 <td><a onclick="scanning = !scanning; Scan();" class="button" id="scanButton">Scan</a></td>
                 <td><a onclick="ToggleSecrets();" class="button">Debug</a></td>
                 <td><a onclick="seedOffset += 1; requestNew= 1; RegenShaders(); UpdateURL();" class="button">Next</a></td>
@@ -1059,10 +1059,7 @@
         <input type="text" value="" id="urlText"/>
         <center><canvas id="palette" width="16" height="2" style="width:16px; height:2px;"></canvas></center><br>
     </div>
-
-        <div id="share-options">
     <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-via="NintendoArtBot" data-lang="en" data-show-count="false" id="twitter_share_link">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-        </div>
 </center>
 </body>
 <script>
