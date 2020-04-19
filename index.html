@@ -1110,16 +1110,24 @@
 
     setTimeout(UpdateURL, 1000);
 
+    // from https://stackoverflow.com/questions/2683742/is-there-a-has-focus-in-javascript-or-jquery
+    jQuery.extend(jQuery.expr[':'], {
+        focus: "a == document.activeElement"
+        });
+
     $(document).on("keypress", function (e) 
     {
-        // are these universal?
-        if(e.which == 110)
+        if($("#showfunc:focus").length==0)
         {
-            $("#nextButton").click();
-        }
-        else if(e.which == 98)
-        {
-            $("#backButton").click();
+            // are these universal?
+            if(e.which == 110)
+            {
+                $("#nextButton").click();
+            }
+            else if(e.which == 98)
+            {
+                $("#backButton").click();
+            }
         }
     // use e.which
     });

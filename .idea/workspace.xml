@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6435d9c5-2eca-45fe-b7ec-e771fdcfd013" name="Default" comment="" />
+    <list default="true" id="6435d9c5-2eca-45fe-b7ec-e771fdcfd013" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -78,22 +80,22 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="251" column="24" lean-forward="true" selection-start-line="251" selection-start-column="24" selection-end-line="251" selection-end-column="24" />
+            <state relative-caret-position="366">
+              <caret line="644" column="54" lean-forward="true" selection-start-line="644" selection-start-column="54" selection-end-line="644" selection-end-column="54" />
               <folding>
-                <marker date="1587332089022" expanded="false" signature="29370:29383" ph="..." />
-                <marker date="1587332089022" expanded="false" signature="29488:29501" ph="..." />
-                <marker date="1587332089022" expanded="false" signature="29661:29717" ph="..." />
-                <marker date="1587332089022" expanded="false" signature="29764:29778" ph="..." />
-                <marker date="1587332089022" expanded="false" signature="29844:29877" ph="..." />
-                <marker date="1587332089022" expanded="false" signature="29994:30027" ph="..." />
-                <marker date="1587332089022" expanded="false" signature="30139:30172" ph="..." />
-                <marker date="1587332089022" expanded="false" signature="30301:30334" ph="..." />
-                <marker date="1587332089022" expanded="false" signature="30467:30500" ph="..." />
-                <marker date="1587332089022" expanded="false" signature="30661:30674" ph="..." />
-                <marker date="1587332089022" expanded="false" signature="30785:30798" ph="..." />
-                <marker date="1587332089022" expanded="false" signature="31897:31921" ph="..." />
-                <marker date="1587332089022" expanded="false" signature="32588:32611" ph="..." />
+                <marker date="1587334774799" expanded="false" signature="29370:29383" ph="..." />
+                <marker date="1587334774799" expanded="false" signature="29488:29501" ph="..." />
+                <marker date="1587334774799" expanded="false" signature="29661:29717" ph="..." />
+                <marker date="1587334774799" expanded="false" signature="29764:29778" ph="..." />
+                <marker date="1587334774799" expanded="false" signature="29844:29877" ph="..." />
+                <marker date="1587334774799" expanded="false" signature="29994:30027" ph="..." />
+                <marker date="1587334774799" expanded="false" signature="30139:30172" ph="..." />
+                <marker date="1587334774799" expanded="false" signature="30301:30334" ph="..." />
+                <marker date="1587334774799" expanded="false" signature="30467:30500" ph="..." />
+                <marker date="1587334774799" expanded="false" signature="30661:30674" ph="..." />
+                <marker date="1587334774799" expanded="false" signature="30785:30798" ph="..." />
+                <marker date="1587334774799" expanded="false" signature="31897:31921" ph="..." />
+                <marker date="1587334774799" expanded="false" signature="32588:32611" ph="..." />
               </folding>
             </state>
           </provider>
@@ -113,7 +115,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>function RegenShaders</find>
       <find>function draw</find>
       <find>&quot;xOffset&quot;</find>
       <find>t =</find>
@@ -143,6 +144,7 @@
       <find>samplingFunctions</find>
       <find>lG()</find>
       <find>NES</find>
+      <find>WRAP</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -742,22 +744,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="251" column="24" lean-forward="true" selection-start-line="251" selection-start-column="24" selection-end-line="251" selection-end-column="24" />
+        <state relative-caret-position="366">
+          <caret line="644" column="54" lean-forward="true" selection-start-line="644" selection-start-column="54" selection-end-line="644" selection-end-column="54" />
           <folding>
-            <marker date="1587332089022" expanded="false" signature="29370:29383" ph="..." />
-            <marker date="1587332089022" expanded="false" signature="29488:29501" ph="..." />
-            <marker date="1587332089022" expanded="false" signature="29661:29717" ph="..." />
-            <marker date="1587332089022" expanded="false" signature="29764:29778" ph="..." />
-            <marker date="1587332089022" expanded="false" signature="29844:29877" ph="..." />
-            <marker date="1587332089022" expanded="false" signature="29994:30027" ph="..." />
-            <marker date="1587332089022" expanded="false" signature="30139:30172" ph="..." />
-            <marker date="1587332089022" expanded="false" signature="30301:30334" ph="..." />
-            <marker date="1587332089022" expanded="false" signature="30467:30500" ph="..." />
-            <marker date="1587332089022" expanded="false" signature="30661:30674" ph="..." />
-            <marker date="1587332089022" expanded="false" signature="30785:30798" ph="..." />
-            <marker date="1587332089022" expanded="false" signature="31897:31921" ph="..." />
-            <marker date="1587332089022" expanded="false" signature="32588:32611" ph="..." />
+            <marker date="1587334774799" expanded="false" signature="29370:29383" ph="..." />
+            <marker date="1587334774799" expanded="false" signature="29488:29501" ph="..." />
+            <marker date="1587334774799" expanded="false" signature="29661:29717" ph="..." />
+            <marker date="1587334774799" expanded="false" signature="29764:29778" ph="..." />
+            <marker date="1587334774799" expanded="false" signature="29844:29877" ph="..." />
+            <marker date="1587334774799" expanded="false" signature="29994:30027" ph="..." />
+            <marker date="1587334774799" expanded="false" signature="30139:30172" ph="..." />
+            <marker date="1587334774799" expanded="false" signature="30301:30334" ph="..." />
+            <marker date="1587334774799" expanded="false" signature="30467:30500" ph="..." />
+            <marker date="1587334774799" expanded="false" signature="30661:30674" ph="..." />
+            <marker date="1587334774799" expanded="false" signature="30785:30798" ph="..." />
+            <marker date="1587334774799" expanded="false" signature="31897:31921" ph="..." />
+            <marker date="1587334774799" expanded="false" signature="32588:32611" ph="..." />
           </folding>
         </state>
       </provider>
