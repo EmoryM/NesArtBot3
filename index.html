@@ -4,7 +4,8 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>NES Art Bot 3.0.96</title>
+    <title>NES Art Bot</title>
+    <!-- 3.0.98 -->
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
             .button {
@@ -387,6 +388,8 @@
         console.log(xOffset)
         xOffset += (oldZoom * 250) - (zoom * 250);
         yOffset += (oldZoom * 250) - (zoom * 250);
+        if(zoom == 0)
+            zoom = 1.0
     }
 
     function ZoomOut()
@@ -395,6 +398,8 @@
         zoom = zoom / 0.9;
         xOffset += (oldZoom * 250) - (zoom * 250);
         yOffset += (oldZoom * 250) - (zoom * 250);
+        if(zoom == 0)
+            zoom = 1.0
     }
 
     function Encode(textData)
@@ -416,7 +421,7 @@
     function CreateLink()
     {
         var equation = document.getElementById("showfunc").value;
-        var data = {"x": xOffset.toFixed(2), "y": yOffset.toFixed(2), "z": zoom.toFixed(2), "t": t.toFixed(2), "s": Math.floor(speed * 10000), "f": equation, "se": randomSeed, "so": seedOffset};
+        var data = {"x": xOffset.toFixed(2), "y": yOffset.toFixed(2), "z": zoom.toFixed(8), "t": t.toFixed(2), "s": Math.floor(speed * 10000), "f": equation, "se": randomSeed, "so": seedOffset};
         //console.log(data);
         var jsonData = JSON.stringify(data);
         var encodedData = Encode(jsonData);
