@@ -46,14 +46,14 @@ float mand(float a, float b)
     return 0.0;
 }
 
-vec2 mand(vec2 a, vec2 b, vec2 c)
+vec2 mand(vec2 a, vec2 b)
 {
-    return vec2(mand(a.x,b.x,c.x), mand(a.y,b.y,c.y));
+    return vec2(mand(a.x,b.x), mand(a.y,b.y));
 }
 
-vec3 mand(vec3 a, vec3 b, vec3 c)
+vec3 mand(vec3 a, vec3 b)
 {
-    return vec3(mand(a.x,b.x,c.x), mand(a.y,b.y,c.y), mand(a.z, b.z, c.z));
+    return vec3(mand(a.x,b.x), mand(a.y,b.y), mand(a.z, b.z));
 }
 
 float mor(float a, float b)
@@ -66,14 +66,14 @@ float mor(float a, float b)
     return 0.0;
 }
 
-vec2 mor(vec2 a, vec2 b, vec2 c)
+vec2 mor(vec2 a, vec2 b)
 {
-    return vec2(mor(a.x,b.x,c.x), mor(a.y,b.y,c.y));
+    return vec2(mor(a.x,b.x), mor(a.y,b.y));
 }
 
-vec3 mor(vec3 a, vec3 b, vec3 c)
+vec3 mor(vec3 a, vec3 b)
 {
-    return vec3(mor(a.x,b.x,c.x), mor(a.y,b.y,c.y), mor(a.z, b.z, c.z));
+    return vec3(mor(a.x,b.x), mor(a.y,b.y), mor(a.z, b.z));
 }
 
 float ssqrt(float a)
