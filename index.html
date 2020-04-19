@@ -417,7 +417,7 @@
     {
         var equation = document.getElementById("showfunc").value;
         var data = {"x": xOffset.toFixed(2), "y": yOffset.toFixed(2), "z": zoom.toFixed(2), "t": t.toFixed(2), "s": Math.floor(speed * 10000), "f": equation, "se": randomSeed, "so": seedOffset};
-        console.log(data);
+        //console.log(data);
         var jsonData = JSON.stringify(data);
         var encodedData = Encode(jsonData);
         var myUrl = location.protocol + '//' + location.host;
@@ -426,11 +426,12 @@
         if(lastChar=="/")
             myUrl = myUrl.substring(0,myUrl.length-1)
 
+        console.log(result);
         var result = myUrl + "/NesArtBot3/?d=" + encodedData;
         console.log(result);
 
-        console.log(encodedData);
-        console.log(Decode(encodedData));
+        //console.log(encodedData);
+        //console.log(Decode(encodedData));
         return result;
     }
 
