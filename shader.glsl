@@ -16,6 +16,66 @@ uniform sampler2D lastFrame;
 const float PI = 3.14159265359;
 float minPositiveFloat = 0.0006;
 
+float mif(float a, float b, float c)
+{
+    if(a > 0.0)
+    {
+        return b;
+    }
+
+    return c;
+}
+
+vec2 mif(vec2 a, vec2 b, vec2 c)
+{
+    return vec2(mif(a.x,b.x,c.x), mif(a.y,b.y,c.y));
+}
+
+vec3 mif(vec3 a, vec3 b, vec3 c)
+{
+    return vec3(mif(a.x,b.x,c.x), mif(a.y,b.y,c.y), mif(a.z, b.z, c.z));
+}
+
+float mand(float a, float b)
+{
+    if(a > 0.0 && b > 0.0)
+    {
+        return 1.0;
+    }
+
+    return 0.0;
+}
+
+vec2 mand(vec2 a, vec2 b, vec2 c)
+{
+    return vec2(mand(a.x,b.x,c.x), mand(a.y,b.y,c.y));
+}
+
+vec3 mand(vec3 a, vec3 b, vec3 c)
+{
+    return vec3(mand(a.x,b.x,c.x), mand(a.y,b.y,c.y), mand(a.z, b.z, c.z));
+}
+
+float mor(float a, float b)
+{
+    if(a > 0.0 || b > 0.0)
+    {
+        return 1.0;
+    }
+
+    return 0.0;
+}
+
+vec2 mor(vec2 a, vec2 b, vec2 c)
+{
+    return vec2(mor(a.x,b.x,c.x), mor(a.y,b.y,c.y));
+}
+
+vec3 mor(vec3 a, vec3 b, vec3 c)
+{
+    return vec3(mor(a.x,b.x,c.x), mor(a.y,b.y,c.y), mor(a.z, b.z, c.z));
+}
+
 float ssqrt(float a)
 {
     return sqrt(abs(a));

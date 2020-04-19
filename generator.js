@@ -1,5 +1,7 @@
 basicFunctions = ["expr+expr", "expr-expr", "expr*expr"];
 
+logicFunctions = ["mif(expr,expr,expr)", "mand(expr,expr)", "mor(expr,expr)"] // mif, mand, mor - I like these terms (short for my)
+
 angleAndTrigFunctions = ["radians(expr)", "degrees(expr)", "sin(expr)", "cos(expr)", "tan(expr)",
     "asin(clamp(expr,-1.0,1.0))", "acos(clamp(expr,-1.0,1.0))", "atan(expr)", "satan(expr,expr)"]; // atan(expr,expr) undefined result if both 0
 
