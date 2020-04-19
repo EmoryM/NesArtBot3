@@ -53,7 +53,7 @@ vec2 mand(vec2 a, vec2 b)
 
 vec3 mand(vec3 a, vec3 b)
 {
-    return vec3(mand(a.x,b.x), mand(a.y,b.y), mand(a.z, b.z));
+    return vec3(mand(a.x,b.x), mand(a.y,b.y));
 }
 
 float mor(float a, float b)
@@ -73,7 +73,7 @@ vec2 mor(vec2 a, vec2 b)
 
 vec3 mor(vec3 a, vec3 b)
 {
-    return vec3(mor(a.x,b.x), mor(a.y,b.y), mor(a.z, b.z));
+    return vec3(mor(a.x,b.x), mor(a.y,b.y), mor(a.z,b.z));
 }
 
 float ssqrt(float a)
