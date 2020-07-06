@@ -1,3 +1,4 @@
+// from https://asserttrue.blogspot.com/2011/12/perlin-noise-in-javascript_31.html
 // This is a port of Ken Perlin's Java code. The
 // original Java code is at http://cs.nyu.edu/%7Eperlin/noise/.
 // Note that in this version, a number from 0 to 1 is returned.

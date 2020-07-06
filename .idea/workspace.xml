@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6435d9c5-2eca-45fe-b7ec-e771fdcfd013" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,8 +17,8 @@
       <file leaf-file-name="shader.glsl" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/shader.glsl">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="555">
-              <caret line="503" column="65" lean-forward="true" selection-start-line="503" selection-start-column="65" selection-end-line="503" selection-end-column="65" />
+            <state relative-caret-position="10060">
+              <caret line="503" column="65" lean-forward="false" selection-start-line="503" selection-start-column="65" selection-end-line="503" selection-end-column="65" />
               <folding>
                 <marker date="1587331275004" expanded="true" signature="5653:5659" ph="{...}" />
                 <marker date="1587331275004" expanded="true" signature="5907:5913" ph="{...}" />
@@ -58,7 +58,7 @@
       <file leaf-file-name="gbmode.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gbmode.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="592">
+            <state relative-caret-position="21260">
               <caret line="1063" column="9" lean-forward="false" selection-start-line="1063" selection-start-column="9" selection-end-line="1063" selection-end-column="9" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#center#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -70,8 +70,8 @@
       <file leaf-file-name="convert.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../Banana Language/convert.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="320">
-              <caret line="20" column="5" lean-forward="true" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
+            <state relative-caret-position="400">
+              <caret line="20" column="5" lean-forward="false" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -80,23 +80,9 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="366">
-              <caret line="644" column="54" lean-forward="true" selection-start-line="644" selection-start-column="54" selection-end-line="644" selection-end-column="54" />
-              <folding>
-                <marker date="1587334774799" expanded="false" signature="29370:29383" ph="..." />
-                <marker date="1587334774799" expanded="false" signature="29488:29501" ph="..." />
-                <marker date="1587334774799" expanded="false" signature="29661:29717" ph="..." />
-                <marker date="1587334774799" expanded="false" signature="29764:29778" ph="..." />
-                <marker date="1587334774799" expanded="false" signature="29844:29877" ph="..." />
-                <marker date="1587334774799" expanded="false" signature="29994:30027" ph="..." />
-                <marker date="1587334774799" expanded="false" signature="30139:30172" ph="..." />
-                <marker date="1587334774799" expanded="false" signature="30301:30334" ph="..." />
-                <marker date="1587334774799" expanded="false" signature="30467:30500" ph="..." />
-                <marker date="1587334774799" expanded="false" signature="30661:30674" ph="..." />
-                <marker date="1587334774799" expanded="false" signature="30785:30798" ph="..." />
-                <marker date="1587334774799" expanded="false" signature="31897:31921" ph="..." />
-                <marker date="1587334774799" expanded="false" signature="32588:32611" ph="..." />
-              </folding>
+            <state relative-caret-position="226">
+              <caret line="634" column="57" lean-forward="false" selection-start-line="634" selection-start-column="57" selection-end-line="634" selection-end-column="57" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -104,7 +90,7 @@
       <file leaf-file-name="generator.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/generator.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="283">
+            <state relative-caret-position="860">
               <caret line="43" column="6" lean-forward="false" selection-start-line="43" selection-start-column="6" selection-end-line="43" selection-end-column="6" />
               <folding />
             </state>
@@ -184,7 +170,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -199,7 +185,7 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -303,17 +289,17 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="2064" height="1128" extended-state="7" />
+    <frame x="-8" y="-8" width="2064" height="1128" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14670658" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13173653" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1758794" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16984925" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -334,6 +320,152 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/shader.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10060">
+          <caret line="503" column="65" lean-forward="false" selection-start-line="503" selection-start-column="65" selection-end-line="503" selection-end-column="65" />
+          <folding>
+            <marker date="1587331275004" expanded="true" signature="5653:5659" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="5907:5913" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="5935:5975" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="6022:6137" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="6174:6270" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="6310:6337" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="6390:6488" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="6526:6597" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="6656:6798" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="6851:6958" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="6993:7030" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="7061:7162" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="7194:7257" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="7292:7574" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="7609:7699" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="7750:7881" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="7933:7993" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="8044:8161" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="8224:8347" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="8405:8739" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="8786:8994" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="9051:9319" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="9355:9460" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="9498:9556" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="9609:9712" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="9734:9801" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="9865:10168" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="10190:10664" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="10731:11632" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="11646:11812" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gbmode.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21260">
+          <caret line="1063" column="9" lean-forward="false" selection-start-line="1063" selection-start-column="9" selection-end-line="1063" selection-end-column="9" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#center#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Banana Language/convert.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="20" column="5" lean-forward="false" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generator.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="860">
+          <caret line="43" column="6" lean-forward="false" selection-start-line="43" selection-start-column="6" selection-end-line="43" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="12680">
+          <caret line="634" column="59" lean-forward="true" selection-start-line="634" selection-start-column="59" selection-end-line="634" selection-end-column="59" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/shader.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10060">
+          <caret line="503" column="65" lean-forward="true" selection-start-line="503" selection-start-column="65" selection-end-line="503" selection-end-column="65" />
+          <folding>
+            <marker date="1587331275004" expanded="true" signature="5653:5659" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="5907:5913" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="5935:5975" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="6022:6137" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="6174:6270" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="6310:6337" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="6390:6488" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="6526:6597" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="6656:6798" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="6851:6958" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="6993:7030" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="7061:7162" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="7194:7257" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="7292:7574" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="7609:7699" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="7750:7881" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="7933:7993" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="8044:8161" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="8224:8347" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="8405:8739" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="8786:8994" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="9051:9319" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="9355:9460" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="9498:9556" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="9609:9712" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="9734:9801" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="9865:10168" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="10190:10664" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="10731:11632" ph="{...}" />
+            <marker date="1587331275004" expanded="true" signature="11646:11812" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gbmode.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21260">
+          <caret line="1063" column="9" lean-forward="false" selection-start-line="1063" selection-start-column="9" selection-end-line="1063" selection-end-column="9" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#center#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Banana Language/convert.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="20" column="5" lean-forward="true" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generator.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="860">
+          <caret line="43" column="6" lean-forward="false" selection-start-line="43" selection-start-column="6" selection-end-line="43" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="12880">
+          <caret line="644" column="54" lean-forward="true" selection-start-line="644" selection-start-column="54" selection-end-line="644" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/shader.glsl">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3840">
@@ -403,9 +535,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="11400">
           <caret line="570" column="13" lean-forward="true" selection-start-line="570" selection-start-column="13" selection-end-line="570" selection-end-column="13" />
-          <folding>
-            <element signature="n#style#0;n#body#0;n#html#0;n#!!top" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -460,9 +590,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1820">
           <caret line="91" column="22" lean-forward="false" selection-start-line="91" selection-start-column="22" selection-end-line="91" selection-end-column="22" />
-          <folding>
-            <element signature="n#style#0;n#body#0;n#html#0;n#!!top" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -537,9 +665,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1820">
           <caret line="91" column="22" lean-forward="false" selection-start-line="91" selection-start-column="22" selection-end-line="91" selection-end-column="22" />
-          <folding>
-            <element signature="n#style#0;n#body#0;n#html#0;n#!!top" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -679,8 +805,8 @@
     <entry file="file://$PROJECT_DIR$/index.htm" />
     <entry file="file://$PROJECT_DIR$/shader.glsl">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="555">
-          <caret line="503" column="65" lean-forward="true" selection-start-line="503" selection-start-column="65" selection-end-line="503" selection-end-column="65" />
+        <state relative-caret-position="10060">
+          <caret line="503" column="65" lean-forward="false" selection-start-line="503" selection-start-column="65" selection-end-line="503" selection-end-column="65" />
           <folding>
             <marker date="1587331275004" expanded="true" signature="5653:5659" ph="{...}" />
             <marker date="1587331275004" expanded="true" signature="5907:5913" ph="{...}" />
@@ -718,15 +844,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../Banana Language/convert.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="20" column="5" lean-forward="true" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
+        <state relative-caret-position="400">
+          <caret line="20" column="5" lean-forward="false" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/generator.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="283">
+        <state relative-caret-position="860">
           <caret line="43" column="6" lean-forward="false" selection-start-line="43" selection-start-column="6" selection-end-line="43" selection-end-column="6" />
           <folding />
         </state>
@@ -734,7 +860,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/gbmode.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="592">
+        <state relative-caret-position="21260">
           <caret line="1063" column="9" lean-forward="false" selection-start-line="1063" selection-start-column="9" selection-end-line="1063" selection-end-column="9" />
           <folding>
             <element signature="n#style#0;n#div#0;n#center#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -744,23 +870,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="366">
-          <caret line="644" column="54" lean-forward="true" selection-start-line="644" selection-start-column="54" selection-end-line="644" selection-end-column="54" />
-          <folding>
-            <marker date="1587334774799" expanded="false" signature="29370:29383" ph="..." />
-            <marker date="1587334774799" expanded="false" signature="29488:29501" ph="..." />
-            <marker date="1587334774799" expanded="false" signature="29661:29717" ph="..." />
-            <marker date="1587334774799" expanded="false" signature="29764:29778" ph="..." />
-            <marker date="1587334774799" expanded="false" signature="29844:29877" ph="..." />
-            <marker date="1587334774799" expanded="false" signature="29994:30027" ph="..." />
-            <marker date="1587334774799" expanded="false" signature="30139:30172" ph="..." />
-            <marker date="1587334774799" expanded="false" signature="30301:30334" ph="..." />
-            <marker date="1587334774799" expanded="false" signature="30467:30500" ph="..." />
-            <marker date="1587334774799" expanded="false" signature="30661:30674" ph="..." />
-            <marker date="1587334774799" expanded="false" signature="30785:30798" ph="..." />
-            <marker date="1587334774799" expanded="false" signature="31897:31921" ph="..." />
-            <marker date="1587334774799" expanded="false" signature="32588:32611" ph="..." />
-          </folding>
+        <state relative-caret-position="226">
+          <caret line="634" column="57" lean-forward="false" selection-start-line="634" selection-start-column="57" selection-end-line="634" selection-end-column="57" />
+          <folding />
         </state>
       </provider>
     </entry>
